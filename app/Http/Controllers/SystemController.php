@@ -10,7 +10,7 @@ class SystemController extends Controller
     public function upload_file(Request $request)
     {
         try {
-            $path = $request->file_data->store("public/data");
+            $path = $request->file_data->storeAs("public/data",$request->file_name);
             $path = \str_replace("public","/storage",$path);
             $url = getenv("APP_URL");
             return $url.$path;
@@ -214,5 +214,54 @@ class SystemController extends Controller
         }
         $data["data"] = $data["data"]->get();
         return view('basis-data',$data);
+    }
+
+    public function pemetaan_list(Request $request)
+    {
+        $data = \App\Models\Pemetaan::query();
+        return datatables()->of($data)->toJson();
+    }
+
+    public function pemetaan_store(Request $request)
+    {
+        $data = $request->all();
+        $model = \App\Models\Pemetaan::query();
+
+        if(!$request->has("id")) 
+        return abort(404);
+
+        if($request->has("delete"))
+        return $model->findorfail($data["id"])->delete();
+
+        $data["id"] = intVal($data["id"]);
+        if($data["id"] !== 0)
+        return $model->findorfail($data["id"])->update($data);
+
+        return $model->create($data);
+    }
+
+    public function layer_store(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+                $p = \App\Models\Pemetaan::findorfail($request->pemetaan_id);
+                $geojson = json_decode($request->geojson,true);
+                $p->update([
+                    "geojson"=>$geojson,
+                    "property"=>json_decode($request->property,true)
+                ]);
+
+                foreach ($geojson["features"] as $key => $value) {
+                    $p->feature()->create([
+                        "feature"=>$value,
+                        "property"=>$value["properties"],
+                    ]);
+                }
+            DB::commit();
+            return ["status"=>"success","message"=>"Data berhasil ditambahkan"];
+        } catch (\Throwable $th) {
+            // DB::rollback();
+            return ["status"=>"error","message"=>$th->getMessage(),"line"=>$th->getLine()];
+        }
     }
 }

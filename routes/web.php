@@ -24,11 +24,21 @@ Route::get('/web-gis', function () {return view('web-gis');})->name("web-gis");
 Route::get('/esri', function () {return view('esri');})->name("esri");
 Auth::routes();
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
 Route::group(["middleware"=>"auth","prefix"=>"admin"],function(){
+
+    Route::get('pemetaan', function() {
+        return view('admin.pemetaan');
+    })->name('pemetaan');
+    Route::get('pemetaan/editor', function() {
+        return view('admin.layer_editor');
+    })->name('pemetaan.editor');
+
+    Route::post("pemetaan",[SystemController::class,"pemetaan_store"])->name("pemetaan.store");
+    Route::post("layer",[SystemController::class,"layer_store"])->name("layer.store");
 
     Route::get('wilayah', function() {
         return view('admin.wilayah');
@@ -93,6 +103,7 @@ Route::group(["middleware"=>"auth","prefix"=>"admin"],function(){
     Route::get('list/sektor',[SystemController::class,"sektor_list"])->name('list.sektor');
     Route::get('list/peta',[SystemController::class,"peta_list"])->name('list.peta');
     Route::get('list/rekap',[SystemController::class,"rekap_list"])->name('list.rekap');
+    Route::get('list/pemetaan',[SystemController::class,"pemetaan_list"])->name('list.pemetaan');
 
 });
 

@@ -253,90 +253,61 @@ return [
         //     'label'       => 4,
         //     'label_color' => 'success',
         // ],
-        // [
-        //     'text' => 'profile',
-        //     'url'  => 'admin/settings',
-        //     'icon' => 'fas fa-fw fa-user',
-        // ],
         [
-            'text' => 'Sektor',
-            'icon'    => 'fas fa-fw fa-list-alt',
-            'url'  => '/admin/sektor',
-        ],
-        [
-            'text' => 'Peta',
-            'icon'    => 'fas fa-fw fa-map',
-            'url'  => '/admin/peta',
-        ],
-        [
-            'text' => 'Wilayah',
-            'url'  => 'admin/wilayah',
-            'icon' => 'fas fa-fw fa-certificate',
-        ],
-        [
-            'text' => 'Rekapitulasi',
-            'url'  => 'admin/rekapitulasi',
-            'icon' => 'fas fa-fw fa-marker',
-        ],
-        [
-            'text'    => 'Basis data',
-            'icon'    => 'fas fa-fw fa-database',
+            'text' => 'Pemetaan',
+            'icon' => 'fas fa-fw fa-map',
             'submenu' => [
                 [
-                    'text' => 'Galeri',
-                    'url'  => '/admin/basisdata/galeri',
+                    'text' => 'Layer',
+                    'url'  => 'admin/pemetaan',
                 ],
                 [
-                    'text' => 'Peta (GAMBAR)',
-                    'url'  => '/admin/basisdata/peta',
-                ],
-                [
-                    'text' => 'Data Spasial',
-                    'url'  => '/admin/basisdata/spasial',
-                ],
-                [
-                    'text' => 'Video',
-                    'url'  => '/admin/basisdata/video',
+                    'text' => 'Layer Editor',
+                    'url'  => '/admin/pemetaan/editor',
                 ],
             ]
         ],
         // [
-        //     'text'    => 'Peta',
+        //     'text' => 'Sektor',
+        //     'icon'    => 'fas fa-fw fa-list-alt',
+        //     'url'  => '/admin/sektor',
+        // ],
+        // [
+        //     'text' => 'Peta',
         //     'icon'    => 'fas fa-fw fa-map',
+        //     'url'  => '/admin/peta',
+        // ],
+        // [
+        //     'text' => 'Wilayah',
+        //     'url'  => 'admin/wilayah',
+        //     'icon' => 'fas fa-fw fa-certificate',
+        // ],
+        // [
+        //     'text' => 'Rekapitulasi',
+        //     'url'  => 'admin/rekapitulasi',
+        //     'icon' => 'fas fa-fw fa-marker',
+        // ],
+        // [
+        //     'text'    => 'Basis data',
+        //     'icon'    => 'fas fa-fw fa-database',
         //     'submenu' => [
         //         [
-        //             'text' => 'Tematik',
-        //             'url'  => '/admin/peta/tematik',
+        //             'text' => 'Galeri',
+        //             'url'  => '/admin/basisdata/galeri',
         //         ],
         //         [
-        //             'text' => 'Layer',
-        //             'url'  => '/admin/peta/layer',
+        //             'text' => 'Peta (GAMBAR)',
+        //             'url'  => '/admin/basisdata/peta',
         //         ],
-                // [
-                //     'text'    => 'level_one',
-                //     'url'     => '#',
-                //     'submenu' => [
-                //         [
-                //             'text' => 'level_two',
-                //             'url'  => '#',
-                //         ],
-                //         [
-                //             'text'    => 'level_two',
-                //             'url'     => '#',
-                //             'submenu' => [
-                //                 [
-                //                     'text' => 'level_three',
-                //                     'url'  => '#',
-                //                 ],
-                //                 [
-                //                     'text' => 'level_three',
-                //                     'url'  => '#',
-                //                 ],
-                //             ],
-                //         ],
-                //     ],
-                // ]
-        //     ],
+        //         [
+        //             'text' => 'Data Spasial',
+        //             'url'  => '/admin/basisdata/spasial',
+        //         ],
+        //         [
+        //             'text' => 'Video',
+        //             'url'  => '/admin/basisdata/video',
+        //         ],
+        //     ]
         // ],
     ],
 
