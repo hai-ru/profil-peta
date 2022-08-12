@@ -130,68 +130,21 @@
                         </h2>
                         <div id="collapse0" class="accordion-collapse collapse show">
                             <div class="accordion-body">
-                                
-                                <form id="data">
-
-                                    <div class="form-group">
-                                        <label>Kab/Kota</label>
-                                        <select id="kab_id" name="kab_id" class="form-control">
-                                            <option value="semua">Semua Data</option>
-                                            @foreach (\App\Models\Kabupaten::orderBy("id","desc")->get() as $item)
-                                                <option value="{{$item->id}}">{{$item->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Kecamatan</label>
-                                        <select id="daerah_id" name="daerah_id" class="form-control">
-                                            <option value="semua">Semua Data</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Desa</label>
-                                        <select id="daerah_id" name="daerah_id" class="form-control">
-                                            <option value="semua">Semua Data</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="kotak">
-                                        <h5>SEKTOR</h5>
-                                        <div class="sektor_data">
-                                            <div class="form-check">
-                                                <input id="flexCheckDefault" class="form-check-input" type="checkbox" value="1" name="sektor">
-                                                <label for="flexCheckDefault" class="form-check-label">
-                                                    Air Bersih
-                                                </label>
-                                            </div>
+                                <div class="layer_data">
+                                    @foreach (\App\Models\Pemetaan::get() as $item)    
+                                    <div class="form-check">
+                                            {!! $item->Icon() !!}
+                                            <input 
+                                                id="layer_{{$item->id}}" class="form-check-input cekbox" 
+                                                type="checkbox" 
+                                                value="{{$item->id}}" 
+                                                name="pemetaan_id">
+                                            <label for="layer_{{$item->id}}" class="form-check-label">
+                                                {{$item->name}}
+                                            </label>
                                         </div>
-                                    </div>
-
-                                    <div class="d-grid">
-                                        <button class="btn btn-primary" id="refresh"> Lihat</button>
-                                    </div>
-
-                                </form>
-
-                                <form id="peta-dasar">
-
-                                    <div class="kotak">
-                                        <h5>LAYER</h5>
-                                        <div class="layer_data">
-                                            <div class="form-check">
-                                                <input id="flexCheckDefault" class="form-check-input" type="checkbox" value="1" name="sektor">
-                                                <label for="flexCheckDefault" class="form-check-label">
-                                                    KAWASAN HUTAN LINDUNG
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="d-grid">
-                                        <button class="btn btn-primary" id="refresh"> Lihat</button>
-                                    </div>
-
-                                </form>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -277,10 +230,20 @@
 <script src="/geoxml3/kmz/ZipFile.complete.js"></script>
 <script src="/loading/jquery-easy-loading/dist/jquery.loading.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+<script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
 
 <script type="text/javascript">
     var map;
     var ib;
+    let infowindow;
     var Layers = [];
     var LayersDasar = [];
     var measureTool;
@@ -302,15 +265,54 @@
         }
     });
 
-    // function myTimer(){
-    //     let seconds = 0;
-    //     var current = moment();
-    //     if(start_render !== undefined){
-    //         seconds = current.diff(start_render, 'seconds');
-    //     }
-    //     let format = seconds+" detik";
-    //     $("#timer").html(format);
-    // }
+    $(".cekbox").click(function(e){
+        const parent = $("#collapse0")
+        let ids = []
+        parent.find("input[type=checkbox]:checked").each(function() {
+            ids.push($(this).val());
+        });
+        loadData(ids)
+       
+    })
+
+    const UnloadMap = () => {
+        map.data.forEach(function(feature) {
+            map.data.remove(feature);
+        });
+    }
+
+    const loadData = ids => {
+        UnloadMap();
+        $.ajax({
+            url:"{{ route('pemetaan.service') }}",
+            type:"POST",
+            data:{"collect":ids},
+            success:function(response){
+                if(!response.status) return alert(response.message);
+                response.data.forEach( (elm,index) => {
+                    for(k in elm.geojson.features){
+                        if(elm.geojson.features[k].properties === undefined) continue;
+                        elm.geojson.features[k].properties.style = elm.marker
+                    }
+                    map.data.addGeoJson(elm.geojson,elm.name)
+                    if(index+1 === response.data.length){
+                        const center = turf.center(elm.geojson);
+                        const{geometry} = center
+                        const cor ={
+                            lat:geometry.coordinates[1],
+                            lng:geometry.coordinates[0]
+                        }
+                        map.setCenter(cor)
+                        map.setZoom(12)
+                    }
+                })
+
+                map.data.setStyle(function(feature){
+                    return feature.getProperty('style');
+                })
+            }
+        })
+    }
 
     function ResetMarker() {
         // Clear out the old markers.
@@ -328,6 +330,7 @@
     }
 
     function initMap() {
+        infowindow = new google.maps.InfoWindow();
         map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: -0.10814501846297607, lng: 109.3182775878906},
             zoom: zooms,
@@ -349,10 +352,14 @@
             fullscreenControl: true
         });
 
-        parserGeoxml = new geoXML3.parser({
-            map: map,
-            afterParse: useTheData,
-            zoom : false
+        ib = new InfoBubble({
+            animation:true,
+            shadowStyle: 0,
+            padding: 0,
+            backgroundColor: 'white',
+            hideCloseButton: false,
+            arrowPosition: 50,
+            arrowStyle: 0
         });
 
         measureTool = new MeasureTool(map, {
@@ -411,6 +418,29 @@
         google.maps.event.addListener(map, "click", function(event) {
             if(ib !== undefined && ib !== null ) ib.close();
         });
+
+        map.data.addListener('click', function(event) {
+            const f = event.feature;
+            let contentString = "";
+            f.forEachProperty((item,key) => {
+                if(key !== "style")
+                contentString += `<tr>
+                    <td>${key}</td>
+                    <td>:</td>
+                    <td>${item}</td>
+                </tr>`
+            })
+            const str = `<table>${contentString}</table>`;
+            // ib.setContent(str);
+            // ib.setPosition(event.latLng);
+            // ib.setOptions({pixelOffset: new google.maps.Size(0,-34)});
+            // ib.setMap(map);
+            // ib.open();
+            infowindow.setContent(str)
+            infowindow.setPosition(event.latLng)
+            infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
+            infowindow.open(map)
+        })
     }
 
     function Koordinat() {
@@ -452,20 +482,6 @@
     }
 
     function polygonMouseOver(poly, text) {
-        
-            ib = new InfoBubble({
-                      animation:false,
-                    //   maxHeight:100,
-                      shadowStyle: 0,
-                      padding: 0,
-                      backgroundColor: 'white',
-                      // borderRadius: 4,
-                      // arrowSize: 0,
-                      // disableAutoPan: true,
-                      hideCloseButton: true,
-                      arrowPosition: 50,
-                      arrowStyle: 0
-                    });
 
           google.maps.event.addListener(poly,'mouseover', function(evt) {
             ib.setContent(text);
@@ -479,248 +495,6 @@
 
     }
 
-    let placemarks_counter = 0;
-    function useTheData(doc) {
-        placemarks_counter = placemarks_counter+doc[0].placemarks.length;
-        $("#log_placemark_counter").html(placemarks_counter);
-        $('body').loading('stop');
-    };
-    
-    let placemarks_counter_dasar = 0;
-    function useTheDataDasar(doc) {
-        placemarks_counter_dasar = placemarks_counter_dasar+doc[0].placemarks.length;
-        $("#log_placemark_dasar_counter").html(placemarks_counter_dasar);
-      $('body').loading('stop');
-    };
-
-    function addMyMarker(placemark,doc) {
-
-        var marker = new google.maps.Marker({
-            title: placemark.name,
-            position: placemark.latlng,
-            map: map,
-            //This case href is the tag in my KML
-            icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAoklEQVRIiWP8//8/w0AApgGxddTiUYtHosVb/lszMv5nJBkn/Z/LwIC3gGAh5DLxjKMMDI6KpHln/yKCSgZrUI9aDAUXZjMwhEsxMIT7MTBcoKfFp+uhjDMMDKf30dFi30Yow4SBwdSJLCMIZiesQCKVgWFlKllaYWCIJa5Ri8kB////x4M3/7eCFPYk4sT/c/7//4/PbMbRVuaoxaMWD3mLASKxZOQDbEC1AAAAAElFTkSuQmCC"
-        });
-
-        ib = new InfoBubble({
-            animation:false,
-
-            shadowStyle: 0,
-            padding: 0,
-            backgroundColor: 'white',
-            hideCloseButton: true,
-            arrowPosition: 50,
-            arrowStyle: 0
-        });
-
-        ib.close();
-
-        google.maps.event.addListener(marker, 'click', function(evt) {
-
-            ib.setContent(placemark.description);
-            ib.setPosition(evt.latLng);
-            ib.setMap(map);
-            ib.open();
-        });
-        
-        return marker;
-    }
-
-    $('#data').submit(function(){
-
-        var data = "tahun="+$('#tahun').val()+"&daerah_id="+$('#daerah_id').val()+"&kategori_id=";
-
-        var id = $("#data input[name=kategori]:checkbox:checked").map(function(){
-          return $(this).val();
-        }).get();
-
-        for (var i = 0; i < id.length; i++) {
-            data += id[i]+',';
-        }
-        data = data.slice(0,-1);
-
-        placemarks_counter = 0;
-        $("#log_placemark_counter").html(0);
-
-        start_render = moment();
-
-        if(startTimer !== undefined){
-            clearInterval(startTimer);
-        }
-
-        // startTimer = setInterval(function(){
-        //     myTimer();
-        // }, 1000);
-
-        $.ajax({
-            url: '/api/layer',
-            type: "GET",
-            data: data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            cache: true,
-            success: function (json) {
-
-                parserGeoxml.docs.map((item,index)=>{
-                    parserGeoxml.hideDocument(item);
-                });
-                if(parserGeoxml.docs.length > 0){
-                    placemarks_counter = 0;
-                }
-
-                $("#log_layer_link").empty();
-                let counter_kml = 0;
-                
-                json.forEach(function(entry) {
-                    
-                    let link = '{{ env("APP_URL") }}'+entry.kml;
-
-                    counter_kml++;
-                    
-                    let status_data = entry.size > 3000000 ? "lebih" : "biasa";
-
-                    $("#log_layer_link").append(
-                        "<tr>"+
-                            "<td class="+'"'+status_data+'"'+">"+link+" ("+entry.sizef+")"+"</td>"+
-                        "</tr>"
-                    );
-                    let status = false;
-                    parserGeoxml.docs.map((item,index)=>{
-                        if(item.baseUrl == link){
-                            parserGeoxml.showDocument(item);
-                            placemarks_counter = placemarks_counter+item.placemarks.length;
-                            $("#log_placemark_counter").html(placemarks_counter);
-                            status = true;
-                        }
-                    });
-
-                    if(!status) parserGeoxml.parse(link);
-
-                });
-
-                $("#log_legenda_counter").html(counter_kml);
-
-            },
-            error: function (result) {
-                // alert('Silahkan Pilih Kategori Terlebih Dahulu!');
-                   Layers.forEach(function(entry) {
-                        if (entry.docs.length != 0) {
-                            entry.hideDocument();
-                        }
-                    });
-                   Layers = []; 
-            }
-        });
-
-        $.ajax({
-            url: '/api/daerah',
-            type: "GET",
-            data: data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            cache: true,
-            success: function (json) {
-
-                var koordinat = {lat: parseFloat(json.latitude), lng: parseFloat(json.longitude)};
-                // console.log(koordinat);
-                map.setCenter(koordinat);
-                  map.setZoom(10);
-
-            },
-            error: function (result) {
-                // alert('Silahkan Pilih Kategori Terlebih Dahulu!');
-                console.log('daerah tidak ditemukan');
-                map.setCenter(MyCoor);
-                  map.setZoom(zooms);
-            }
-        });
-        
-        return false;
-    });
-
-    $('#peta-dasar').submit(function(){
-
-        var data = "kategori_id=";
-
-        var id = $("#peta-dasar input:checkbox:checked").map(function(){
-          return $(this).val();
-        }).get();
-
-        for (var i = 0; i < id.length; i++) {
-            data += id[i]+',';
-        }
-        data = data.slice(0,-1);
-
-        placemarks_counter_dasar = 0;
-        $("#log_placemark_dasar_counter").html(0);
-
-        $.ajax({
-            url: '/api/layer-dasar',
-            type: "GET",
-            data: data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            cache: true,
-            success: function (json) {
-
-
-                if(LayersDasar.length > 0){   
-
-                    LayersDasar.forEach(function(entry) {
-                        if (entry.docs.length != 0) {
-                            entry.hideDocument();
-                        }
-                    });
-                   LayersDasar = []; 
-
-                }
-
-                $("#log_layer_link_dasar").empty();
-                let counter_kml = 0;
-
-                json.forEach(function(entry) {
-
-                    let link = '{{ env("APP_URL") }}'+entry.kml;
-
-                    counter_kml++;
-                    
-                    let status_data = entry.size > 3000000 ? "lebih" : "biasa";
-
-                    $("#log_layer_link_dasar").append(
-                        "<tr>"+
-                            "<td class="+'"'+status_data+'"'+">"+link+" ("+entry.sizef+")"+"</td>"+
-                        "</tr>"
-                    );
-
-                        LayersDasar[entry.id] = new geoXML3.parser({
-                            map: map,
-                            preserveViewport: true,
-                            zIndex : 1,
-                            afterParse: useTheDataDasar,
-                            zoom : false
-                        });
-
-                    LayersDasar[entry.id].parse(entry.kml);
-                });
-
-                $("#log_dasar_counter").html(counter_kml);
-
-
-            },
-            error: function (result) {
-
-                LayersDasar.forEach(function(entry) {
-                    if (entry.docs.length != 0) {
-                        entry.hideDocument();
-                    }
-                });
-                LayersDasar = [];
-            }
-        });
-        
-        return false;
-    });
 
     $('#btn-control').click(function(){
         $('#control-map').show("slow");
@@ -732,11 +506,6 @@
         $('#control-map').hide("slow");
         $(this).hide("slow");
         $('#btn-control').show("slow");
-    });
-
-    $(function(){
-        // $( "#data" ).submit();
-        // $( "#peta-dasar" ).submit();
     });
 
     $( document ).ajaxStart(function() {

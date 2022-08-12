@@ -60,7 +60,8 @@
                         <table class="table table-striped table-hover" id="tabel_data">
                             <thead>
                                 <tr>
-                                    <th>Data</th>
+                                    <th>Nama</th>
+                                    <th>Total Data</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -77,7 +78,7 @@
 
 @section('adminlte_js')
     <script>
-
+        
         const data_table = $("#tabel_data").DataTable({
             "processing": true,
             "serverSide": true,
@@ -87,12 +88,15 @@
                     "data":"name",
                 },
                 {
+                    "data":"feature_count",
+                },
+                {
                     "data":"id",
                     "render":function(data,meta,row){
                         return `
                             <button onclick="editData(${row.id},'${row.name}')" class="btn btn-primary btn-xs"><i class="fa fa-pencil-alt"></i></button>
                             <button onclick="deleteData(${row.id},this)" class="btn btn-primary btn-xs"><i class="fa fa-trash"></i></button>
-                            <a class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
+                            <a target="_blank" href="{{ route("pemetaan.editor") }}?pemetaan_id=${data}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
                         `
                     }
                 },

@@ -30,4 +30,31 @@ class Pemetaan extends Model
     {
         return $this->hasMany(Feature::class,"pemetaan_id","id");
     }
+
+    public function Icon()
+    {
+        switch ($this->polyline["default"] ?? "") {
+            case 'polyline':
+                return "<div style='
+                height: 10px;
+                width: 21px;
+                background: {$this->marker['strokeColor']};
+                display: inline-block;'></div>";
+                break;
+            case 'polygon':
+                return "<div style='
+                height: 10px;
+                width: 21px;
+                border: {$this->marker['strokeWeight']}px solid {$this->marker['strokeColor']};
+                background: {$this->marker['fillColor']};
+                opacity: {$this->marker['fillOpacity']};
+                display: inline-block;'></div>";
+                break;
+            
+            default:
+                $icon = $this->marker["icon"] ?? "";
+                return "<img src='$icon' />";
+            break;
+        }
+    }
 }

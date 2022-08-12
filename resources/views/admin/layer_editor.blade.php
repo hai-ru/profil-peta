@@ -85,7 +85,6 @@
                         Map Visualisasi
                     </h3>
                     <div class="card-tools">
-                        <button id="test" class="btn btn-primary">test</button>
                         <button id="import" class="btn btn-primary">Import SHP</button>
                     </div>
                 </div>
@@ -129,6 +128,19 @@
         let columns = [];
         let layer_active;
         let infowindow;
+        let master_data = null;
+        let layer = null;
+        const url = $("#url").val()
+
+        const params = (new URL(document.location)).searchParams;
+        const pemetaan_id = parseInt(params.get("pemetaan_id")) ?? 0;
+
+        $(document).ready(()=>{
+            if(pemetaan_id !== 0){
+                $("#pemetaan_id").val(pemetaan_id);
+                LoadData(pemetaan_id);
+            }
+        })
 
         function initMap() {
 
@@ -183,9 +195,12 @@
             // drawingManager.setMap(map);
 
         }
-        
-        const url = $("#url").val()
-        let layer = null;
+
+        $("#pemetaan_id").change(function(e){
+            const id = $(this).val();
+            if(id == "") return null;
+            LoadData(id)
+        })
 
         $("#import").click(function(e){
             $("#file_data").click()
@@ -200,59 +215,76 @@
             formData.append('file_data', $('#file_data')[0].files[0]);
             const filename = $('#file_data').val().replace(/C:\\fakepath\\/i, '')
             formData.append('file_name', filename);
+
+            const btn = $("#import");
+            const btn_text = btn.text()
+
             $.ajax({
                 url : '{{ route("upload") }}',
                 type : 'POST',
                 data : formData,
                 processData: false,
                 contentType: false,
+                beforeSend:function(){
+                    btn.attr("disabled",true)
+                    btn.html("Loading...")
+                },
+                complete:function(){
+                    btn.removeAttr("disabled")
+                    btn.html(btn_text)
+                },
                 success : function(data) {
                     $("#file_data").val("")
                     UnloadMap()
                     shp(data)
                     .then(function(geojson){
-                        try {
-                            
-                            if(geojson.features.length > 0){
-                                for(key in geojson.features[0].properties){
-                                    columns.push(key)
-                                }
-                            }
-                            layer_collecting.push(geojson);
-                            layer_active = geojson;
-                            map.data.addGeoJson(geojson);
-                            map.data.addListener('click', function(event) {
-                                const f = event.feature;
-                                let contentString = "";
-                                f.forEachProperty((item,key) => {
-                                    contentString += `<tr>
-                                        <td>${key}</td>
-                                        <td>:</td>
-                                        <td>${item}</td>
-                                    </tr>`
-                                })
-                                const str = `<table>${contentString}</table>`;
-                                infowindow.setContent(str)
-                                infowindow.setPosition(event.latLng)
-                                infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
-                                infowindow.open(map)
-                            })
-                            LoadAtribut()
-                            const center = turf.center(geojson);
-                            const{geometry} = center
-                            const cor ={
-                                lat:geometry.coordinates[1],
-                                lng:geometry.coordinates[0]
-                            }
-                            map.setCenter(cor)
-                        } catch (error) {
-                            alert("Failed to import shp data")
-                            console.log(error,geojson)
-                        }
+                        LoadMap(geojson)
                     })
                 }
             });
         })
+
+        const LoadMap = geojson => {
+            try {
+                            
+                if(geojson.features.length > 0){
+                    for(key in geojson.features[0].properties){
+                        columns.push(key)
+                    }
+                }
+                layer_collecting.push(geojson);
+                layer_active = geojson;
+                map.data.addGeoJson(geojson);
+                map.data.addListener('click', function(event) {
+                    const f = event.feature;
+                    let contentString = "";
+                    f.forEachProperty((item,key) => {
+                        contentString += `<tr>
+                            <td>${key}</td>
+                            <td>:</td>
+                            <td>${item}</td>
+                        </tr>`
+                    })
+                    const str = `<table>${contentString}</table>`;
+                    infowindow.setContent(str)
+                    infowindow.setPosition(event.latLng)
+                    infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
+                    infowindow.open(map)
+                })
+                LoadAtribut()
+                const center = turf.center(geojson);
+                const{geometry} = center
+                const cor ={
+                    lat:geometry.coordinates[1],
+                    lng:geometry.coordinates[0]
+                }
+                map.setCenter(cor)
+                map.setZoom(10)
+            } catch (error) {
+                alert("Failed to load data...")
+                console.log(error,geojson)
+            }
+        }
 
         const UnloadMap = () => {
             map.data.forEach(function(feature) {
@@ -260,26 +292,22 @@
             });
         }
 
-        let master_data = null;
-        const LoadData = () => {
+        const LoadData = id => {
+            const btn = $("#pemetaan_id");
             $.ajax({
-                url : '/',
+                url : '{{ route("pemetaan.data") }}',
                 type : 'GET',
+                data:{"pemetaan_id":id},
+                beforeSend:function(){
+                    btn.attr("disabled",true)
+                },
+                complete:function(){
+                    btn.removeAttr("disabled")
+                },
                 success : function(response) {
-                    master_data = response
-                    if(response.desa !== undefined)
-                     $("#desa").text(response.desa.name);
-                    if(response.desa !== undefined)
-                     $("#kecamatan").text(response.desa.kecamatan.name);
-                    if(response.desa !== undefined)
-                     $("#kab_kota").text(response.desa.kecamatan.kabupaten.name);
-                    if(response.tematik !== undefined)
-                     $("#sektor").text(response.tematik.name);
-                    if(response.datapeta !== null ){
-                        const geojson = JSON.parse(response.datapeta.geojson)
-                        layer = geojson;
-                        LoadMap();
-                    }
+                    const {data} = response
+                    UnloadMap()
+                    LoadMap(data.geojson)
                 },
                 error:function(e){
                     console.log(e)
@@ -290,20 +318,15 @@
         const LoadAtribut = () => {
             let column_str = "";
             columns.map((item,i)=>{
-                // column_str += `<th><input data-index="${i}" class="kolom" readonly id="kolom_${key}" name="${key}" value="${item.label}" /></th>`
                 column_str += `<th><input data-index="${i}" class="kolom" readonly id="kolom_${item}" name="${item}" value="${item}" /></th>`
             })
 
             let sub_field = "";
-            // const atrdata = layer.features.map((item,index)=>{
             const atrdata = map.data.forEach((item,index)=>{
                 let column_val = "";
                 let iteration = 0;
-                // for(key in item.properties){
                 item.forEachProperty( (val, str) => {
-                    // const val = item.properties[key]
                     const tipe = columns[iteration] == undefined ? "text" : columns[iteration].tipe;
-                    // console.log(tipe,columns,iteration)
                     switch (tipe) {
                         case "file":
                             column_val += `
@@ -383,10 +406,6 @@
             $("#tambah_kolom_form").modal("show");
         })
 
-        $("#style_setup").click(function(e){
-            $("#pengaturan_style").modal("show");
-        })
-
         $("#add_column_form").validate({
             submitHandler:function(form){
                 const data = getFormData($(form))
@@ -439,16 +458,23 @@
                 property:JSON.stringify(columns)
             }
             console.log(input)
+            const btn = $("#simpan");
+            const btn_text = btn.text();
             $.ajax({
                 url : '{{ route("layer.store") }}',
                 type : 'POST',
                 data : input,
+                beforeSend:function(){
+                    btn.attr("disabled",true)
+                    btn.html("Loading...")
+                },
+                complete:function(){
+                    btn.removeAttr("disabled")
+                    btn.html(btn_text)
+                },
                 success : function(data) {
                     console.log(input,data)
                     swal.fire("",data.message,data.status)
-                    // if(data.status == "success"){
-                    //     window.location = "{{ route('peta') }}";
-                    // }
                 },
                 error:function(e){
                     console.log(e)

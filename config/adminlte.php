@@ -267,11 +267,11 @@ return [
                 ],
             ]
         ],
-        // [
-        //     'text' => 'Sektor',
-        //     'icon'    => 'fas fa-fw fa-list-alt',
-        //     'url'  => '/admin/sektor',
-        // ],
+        [
+            'text' => 'Filemanager',
+            'icon'    => 'fas fa-fw fa-file-alt',
+            'url'  => '/admin/filemanager',
+        ],
         // [
         //     'text' => 'Peta',
         //     'icon'    => 'fas fa-fw fa-map',

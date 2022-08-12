@@ -1,10 +1,12 @@
+@php($c = \App\Models\config::first())
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sistem Informasi Infrastruktur Perbatasan</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <title>{{ $c->judul }}</title>
 
      <!-- Bootstrap CSS -->
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -17,20 +19,13 @@
 </head>
 <body>
     <div class="container-content">
-        <h5 class="text-center my-2">SISTEM INFORMASI INFRASTRUKTUR PERBATASAN BERBASIS WEB GIS</h5>
+        <h5 class="text-center my-2">{{ $c->judul }}</h5>
         <ul class="nav nav-pills nav-fill">
+          @foreach ($c->menu as $item)    
             <li class="nav-item">
-              <a class="nav-link {{ Request::URL() == route("/") ? "active" : "" }}" href="{{ route("/") }}">Beranda</a>
+              <a class="nav-link {{ Request::is($item["link"]) ? "active" : "" }}" href="{{ $item["link"] }}">{{$item["text"]}}</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link {{ Request::URL() == route("rekapitulasi") ? "active" : "" }}" href="{{ route("rekapitulasi") }}">Rekapitulasi</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link {{ Request::URL() == route("basis-data") ? "active" : "" }}" href="{{ route("basis-data") }}">Basis Data</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link {{ Request::URL() == route("web-gis") ? "active" : "" }}" href="{{ route("web-gis") }}">Web GIS</a>
-            </li>
+          @endforeach
         </ul>
         @yield('content')
     </div>

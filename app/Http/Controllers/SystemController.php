@@ -218,7 +218,9 @@ class SystemController extends Controller
 
     public function pemetaan_list(Request $request)
     {
-        $data = \App\Models\Pemetaan::query();
+        $data = \App\Models\Pemetaan::query()
+        ->select("id","name")
+        ->withCount("Feature");
         return datatables()->of($data)->toJson();
     }
 
@@ -250,7 +252,7 @@ class SystemController extends Controller
                     "geojson"=>$geojson,
                     "property"=>json_decode($request->property,true)
                 ]);
-
+                $p->feature()->delete();
                 foreach ($geojson["features"] as $key => $value) {
                     $p->feature()->create([
                         "feature"=>$value,
@@ -262,6 +264,46 @@ class SystemController extends Controller
         } catch (\Throwable $th) {
             // DB::rollback();
             return ["status"=>"error","message"=>$th->getMessage(),"line"=>$th->getLine()];
+        }
+    }
+
+    public function pemetaan_data(Request $request)
+    {
+        try {
+            $p = \App\Models\Pemetaan::findorfail($request->pemetaan_id);
+            return ["status"=>true,"data"=>$p];
+        } catch (\Throwable $th) {
+            //throw $th;
+            return ["status"=>false,"message"=>$th->getMessage(),"line"=>$th->getLine()];
+        }
+    }
+
+    public function tabulasi_data(Request $request)
+    {
+        try {
+            $p = \App\Models\Pemetaan::findorfail($request->pemetaan_id) ?? \App\Models\Pemetaan::first();
+            // DD($p->feature());
+            return datatables()->of($p->feature()->select("id","property"))->make(true);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    public function pemetaan_service(Request $request)
+    {
+        try {
+            $p = \App\Models\Pemetaan::query();
+
+            $data = $p->whereIn("id",$request->collect ?? [])
+            ->select("id","geojson","marker","name")
+            ->get();
+            return [
+                "status"=>true,
+                "data"=>$data
+            ];
+        } catch (\Throwable $th) {
+            //throw $th;
+            return ["status"=>false,"message"=>$th->getMessage(),"line"=>$th->getLine()];
         }
     }
 }

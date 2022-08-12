@@ -24,11 +24,33 @@ Route::get('/web-gis', function () {return view('web-gis');})->name("web-gis");
 Route::get('/esri', function () {return view('esri');})->name("esri");
 Auth::routes();
 
+Route::get('laporan', function() {
+    return view('laporan');
+})->name('laporan');
+
+Route::get('recap/{id}', function($id) {
+    $p = \App\Models\Pemetaan::findorfail($id);
+    $data["columns"] = $p->property;
+    $data["id"] = intval($id);
+    return view('tabulasi',$data);
+})->name('tabulasi');
+
+Route::get('/tabulasi-data', [App\Http\Controllers\SystemController::class, 'tabulasi_data'])->name('tabulasi.data');
+Route::post('/pemetaan-data', [App\Http\Controllers\SystemController::class, 'pemetaan_service'])->name('pemetaan.service');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
+Route::group(['prefix' => 'filemanager', 'middleware' => ['web']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});
+
 Route::group(["middleware"=>"auth","prefix"=>"admin"],function(){
+
+    Route::get('filemanager', function() {
+        return view('admin.filemanager');
+    })->name('basisdata');
 
     Route::get('pemetaan', function() {
         return view('admin.pemetaan');
@@ -37,6 +59,7 @@ Route::group(["middleware"=>"auth","prefix"=>"admin"],function(){
         return view('admin.layer_editor');
     })->name('pemetaan.editor');
 
+    Route::get("pemetaan/data",[SystemController::class,"pemetaan_data"])->name("pemetaan.data");
     Route::post("pemetaan",[SystemController::class,"pemetaan_store"])->name("pemetaan.store");
     Route::post("layer",[SystemController::class,"layer_store"])->name("layer.store");
 
