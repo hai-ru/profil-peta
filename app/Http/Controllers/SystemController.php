@@ -306,4 +306,16 @@ class SystemController extends Controller
             return ["status"=>false,"message"=>$th->getMessage(),"line"=>$th->getLine()];
         }
     }
+
+    public function pengaturan_store(Request $request)
+    {
+        try {
+            $data = $request->all();
+            \App\Models\config::first()->update($data);
+            return ["status"=>"success","message"=>"Data berhasil ditambahkan"];
+        } catch (\Throwable $th) {
+            //throw $th;
+            return ["status"=>"error","message"=>$th->getMessage(),"line"=>$th->getLine()];
+        }
+    }
 }

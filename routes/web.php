@@ -48,6 +48,12 @@ Route::group(['prefix' => 'filemanager', 'middleware' => ['web']], function () {
 
 Route::group(["middleware"=>"auth","prefix"=>"admin"],function(){
 
+    Route::get('pengaturan', function() {
+        $data["c"] = \App\Models\config::first();
+        return view('admin.config',$data);
+    })->name('pengaturan');
+    Route::post("pengaturan",[SystemController::class,"pengaturan_store"])->name("pengaturan.store");
+
     Route::get('filemanager', function() {
         return view('admin.filemanager');
     })->name('basisdata');

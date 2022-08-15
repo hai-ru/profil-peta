@@ -68,7 +68,7 @@
             <div class="col-sm-11">
                 <select id="pemetaan_id" name="pemetaan_id" class="form-control">
                     <option>-- Pilih Judul Pemetaan --</option>
-                    @foreach (\App\Models\pemetaan::get() as $item)
+                    @foreach (\App\Models\Pemetaan::get() as $item)
                         <option value="{{$item->id}}">{{ $item->name }}</option>
                     @endforeach
                 </select>

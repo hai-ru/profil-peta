@@ -12,4 +12,10 @@ class config extends Model
     protected $casts = [
         "menu" => 'array',
     ];
+
+    protected $fillable = [
+        "menu",
+        "video",
+        "judul",
+    ];
 }
