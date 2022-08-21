@@ -14,7 +14,13 @@ class configSeed extends Seeder
     public function run()
     {
         $c = \App\Models\config::query();
-        if(!empty($c->first())) return null;
+        $check = $c->first();
+        if(!empty($check)) {
+            $menus = '[{"text":"Beranda","href":"\/","icon":"","target":"_self","title":""},{"text":"Data Laporan","href":"\/laporan","icon":"","target":"_self","title":""},{"text":"Rekapitulasi","href":"\/recap\/1","icon":"","target":"_self","title":""},{"text":"Web GIS","href":"\/web-gis","icon":"","target":"_self","title":""}]';
+            return $check->update([
+                "menu"=>\json_decode($menus,true)
+            ]);
+        }
         $c->create([
             "judul"=>"SISTEM INFORMASI PENELITIAN DAN PENGEMBANGAN",
             "video"=>"https://video.com",

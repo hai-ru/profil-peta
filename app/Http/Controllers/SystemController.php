@@ -311,8 +311,11 @@ class SystemController extends Controller
     {
         try {
             $data = $request->all();
+            if(isset($data["menu"])) {
+                $data["menu"] = json_decode($data["menu"],true);
+            }
             \App\Models\config::first()->update($data);
-            return ["status"=>"success","message"=>"Data berhasil ditambahkan"];
+            return ["status"=>"success","message"=>"Data berhasil disimpan."];
         } catch (\Throwable $th) {
             //throw $th;
             return ["status"=>"error","message"=>$th->getMessage(),"line"=>$th->getLine()];

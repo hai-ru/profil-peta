@@ -23,7 +23,7 @@
         <ul class="nav nav-pills nav-fill">
           @foreach ($c->menu as $item)    
             <li class="nav-item">
-              <a class="nav-link {{ Request::is($item["link"]) ? "active" : "" }}" href="{{ $item["link"] }}">{{$item["text"]}}</a>
+              <a class="nav-link {{ Request::is($item["href"]) ? "active" : "" }}" href="{{ $item["href"] }}">{{$item["text"]}}</a>
             </li>
           @endforeach
         </ul>
