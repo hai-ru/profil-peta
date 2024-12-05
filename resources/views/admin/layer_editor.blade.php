@@ -246,39 +246,55 @@
 
         const LoadMap = geojson => {
             try {
-                            
-                if(geojson.features.length > 0){
-                    for(key in geojson.features[0].properties){
-                        columns.push(key)
-                    }
-                }
+                         
+                // if(geojson[0].features.length > 0){
+                //     for(key in geojson[0].features[0].properties){
+                //         columns.push(key)
+                //     }
+                // }
+                if(geojson == null) return;
                 layer_collecting.push(geojson);
                 layer_active = geojson;
-                map.data.addGeoJson(geojson);
+                let cor = null;
+                const last_index = geojson.length - 1;
+                for(const j in geojson){
+                    const val = geojson[j]
+                    map.data.addGeoJson(val);
+                    if(j == last_index){
+                        const center = turf.center(val);
+                        // console.log("center",center)
+                        const{geometry} = center
+                        cor ={
+                            lat:geometry.coordinates[1],
+                            lng:geometry.coordinates[0]
+                        }
+                    }
+                    if(j == 0){
+                        for(key in val.features[0].properties){
+                            columns.push(key)
+                        }
+                    }
+                }
                 map.data.addListener('click', function(event) {
-                    const f = event.feature;
-                    let contentString = "";
-                    f.forEachProperty((item,key) => {
-                        contentString += `<tr>
-                            <td>${key}</td>
-                            <td>:</td>
-                            <td>${item}</td>
-                        </tr>`
-                    })
-                    const str = `<table>${contentString}</table>`;
-                    infowindow.setContent(str)
-                    infowindow.setPosition(event.latLng)
-                    infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
-                    infowindow.open(map)
+                        const f = event.feature;
+                        let contentString = "";
+                        f.forEachProperty((item,key) => {
+                            contentString += `<tr>
+                                <td>${key}</td>
+                                <td>:</td>
+                                <td>${item}</td>
+                            </tr>`
+                        })
+                        const str = `<table>${contentString}</table>`;
+                        infowindow.setContent(str)
+                        infowindow.setPosition(event.latLng)
+                        infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
+                        infowindow.open(map)
                 })
                 LoadAtribut()
-                const center = turf.center(geojson);
-                const{geometry} = center
-                const cor ={
-                    lat:geometry.coordinates[1],
-                    lng:geometry.coordinates[0]
+                if(cor !== null){
+                    map.setCenter(cor)
                 }
-                map.setCenter(cor)
                 map.setZoom(10)
             } catch (error) {
                 alert("Failed to load data...")
