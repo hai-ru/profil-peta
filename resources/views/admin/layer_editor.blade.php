@@ -252,27 +252,40 @@
                 //         columns.push(key)
                 //     }
                 // }
+                console.log("geojson",geojson)
                 if(geojson == null) return;
                 layer_collecting.push(geojson);
                 layer_active = geojson;
                 let cor = null;
-                const last_index = geojson.length - 1;
-                for(const j in geojson){
-                    const val = geojson[j]
-                    map.data.addGeoJson(val);
-                    if(j == last_index){
-                        const center = turf.center(val);
-                        // console.log("center",center)
-                        const{geometry} = center
-                        cor ={
-                            lat:geometry.coordinates[1],
-                            lng:geometry.coordinates[0]
+                if(Array.isArray(geojson)){
+                    const last_index = geojson.length - 1;
+                    for(const j in geojson){
+                        const val = geojson[j]
+                        map.data.addGeoJson(val);
+                        if(j == last_index){
+                            const center = turf.center(val);
+                            // console.log("center",center)
+                            const{geometry} = center
+                            cor ={
+                                lat:geometry.coordinates[1],
+                                lng:geometry.coordinates[0]
+                            }
+                        }
+                        if(j == 0){
+                            for(key in val.features[0].properties){
+                                columns.push(key)
+                            }
                         }
                     }
-                    if(j == 0){
-                        for(key in val.features[0].properties){
-                            columns.push(key)
-                        }
+                }
+                if(geojson.type){
+                    map.data.addGeoJson(geojson);
+                    const val = geojson.features[0];
+                    const center = turf.center(val);
+                    const{geometry} = center
+                    cor ={
+                        lat:geometry.coordinates[1],
+                        lng:geometry.coordinates[0]
                     }
                 }
                 map.data.addListener('click', function(event) {
@@ -341,6 +354,7 @@
             const atrdata = map.data.forEach((item,index)=>{
                 let column_val = "";
                 let iteration = 0;
+                let key;
                 item.forEachProperty( (val, str) => {
                     const tipe = columns[iteration] == undefined ? "text" : columns[iteration].tipe;
                     switch (tipe) {
@@ -363,8 +377,12 @@
                             break;
                     
                         default:
+                            
+                            if(!key)
+                            key = "";
+
                             column_val += `
-                                <td id="atr_${item}_${iteration}"><input type="text" name="${key}" value="${val}" /></td>
+                                <td id="atr_${item}_${iteration}"><input type="text" name="${name}" value="${val}" /></td>
                             `
                             break;
                     }
