@@ -22,9 +22,11 @@
         <h5 class="text-center my-2">{{ $c->judul }}</h5>
         <ul class="nav nav-pills nav-fill">
           @foreach ($c->menu as $item)    
-            <li class="nav-item">
-              <a class="nav-link {{ Request::is($item["href"]) ? "active" : "" }}" href="{{ $item["href"] }}">{{$item["text"]}}</a>
-            </li>
+            @if(isset($item["href"]))
+              <li class="nav-item">
+                <a class="nav-link {{ Request::is($item["href"]) ? "active" : "" }}" href="{{ $item["href"] }}">{{$item["text"]}}</a>
+              </li>
+            @endif
           @endforeach
         </ul>
         @yield('content')

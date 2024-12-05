@@ -22,12 +22,12 @@ class CreateDataPetaDesasTable extends Migration
             ->onUpdate('cascade')
             ->onDelete('cascade');
 
-            $table->foreignId("data_peta_id")
-            ->references('id')
-            ->on('data_petas')
-            ->onUpdate('cascade')
-            ->onDelete('set null')
-            ->nullable();
+            // $table->foreignId("data_peta_id")
+            // ->references('id')
+            // ->on('data_petas')
+            // ->onUpdate('cascade')
+            // ->onDelete('set null')
+            // ->nullable();
 
             $table->timestamps();
         });
