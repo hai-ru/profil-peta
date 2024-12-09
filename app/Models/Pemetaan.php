@@ -24,6 +24,7 @@ class Pemetaan extends Model
         "polygon",
         "geojson",
         "property",
+        "kategori",
     ];
 
     public function Feature()

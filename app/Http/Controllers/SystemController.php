@@ -219,7 +219,7 @@ class SystemController extends Controller
     public function pemetaan_list(Request $request)
     {
         $data = \App\Models\Pemetaan::query()
-        ->select("id","name")
+        ->select("id","name",'kategori')
         ->withCount("Feature");
         return datatables()->of($data)->toJson();
     }

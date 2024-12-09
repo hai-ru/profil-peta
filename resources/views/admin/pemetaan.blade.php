@@ -61,6 +61,7 @@
                             <thead>
                                 <tr>
                                     <th>Nama</th>
+                                    <th>Kategori</th>
                                     <th>Total Data</th>
                                     <th>Action</th>
                                 </tr>
@@ -87,6 +88,7 @@
                 {
                     "data":"name",
                 },
+                {"data":"kategori",},
                 {
                     "data":"feature_count",
                 },
