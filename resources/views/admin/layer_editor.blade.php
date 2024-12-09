@@ -34,6 +34,9 @@
         input.kolom{
            width: 80%;
        }
+       img.img_preview_atr{
+        height: 100px;
+       }
     </style>
 @endsection
 
@@ -247,15 +250,20 @@
         const LoadMap = geojson => {
             try {
                          
-                // if(geojson[0].features.length > 0){
-                //     for(key in geojson[0].features[0].properties){
-                //         columns.push(key)
-                //     }
-                // }
-                console.log("geojson",geojson)
                 if(geojson == null) return;
+                if(Array.isArray(geojson) && geojson[0].features.length > 0){
+                    for(key in geojson[0].features[0].properties){
+                        columns.push(key)
+                    }
+                }
+                if(!Array.isArray(geojson) && geojson.features?.length > 0){
+                    for(key in geojson.features[0].properties){
+                        columns.push(key)
+                    }
+                }
                 layer_collecting.push(geojson);
                 layer_active = geojson;
+                layer = geojson;
                 let cor = null;
                 if(Array.isArray(geojson)){
                     const last_index = geojson.length - 1;
@@ -348,8 +356,6 @@
             let column_str = "";
             columns.map((item,i)=>{
 
-                console.log("item",item)
-
                 if(item.label)
                 item = item.label;
 
@@ -357,12 +363,17 @@
             })
 
             let sub_field = "";
-            const atrdata = map.data.forEach((item,index)=>{
+            let index = 0;
+            const atrdata = map.data.forEach((item)=>{
                 let column_val = "";
                 let iteration = 0;
                 let key;
+                console.log("index",index);
                 item.forEachProperty( (val, str) => {
-                    const tipe = columns[iteration] == undefined ? "text" : columns[iteration].tipe;
+                    let tipe = "text"
+                    if(columns[iteration])
+                    tipe = columns[iteration].tipe;
+                    // console.log("tipe",tipe,columns[iteration]);
                     switch (tipe) {
                         case "file":
                             column_val += `
@@ -373,7 +384,6 @@
                             `
                             break;
                         case "image":
-                            console.log();
                             column_val += `
                                 <td id="atr_${item}_${iteration}">
                                     <input accept="image/*" type="file" onchange="changeData(${index},${iteration},this,'${tipe}')" />
@@ -397,6 +407,7 @@
                 })
                 // }
                 sub_field += `<tr>${column_val}</tr>`
+                index++;
             })
 
             const tabel_data = `
@@ -457,6 +468,7 @@
                         label:data.name,
                         tipe:data.tipe
                     })
+                    console.log("columns",columns,layer)
                     for(key in layer?.features){
                         let item = layer.features[key]
                         item.properties[data.name] = "";
@@ -471,7 +483,10 @@
 
         const changeData = (feature_index,properties_index,elm,tipe) => {
             let formData = new FormData();
-            formData.append('file_data', $(elm)[0].files[0]);
+            const files = $(elm)[0].files[0];
+            formData.append('file_data', files);
+            const filename = $(elm).val().replace(/C:\\fakepath\\/i, '')
+            formData.append('file_name', filename);
             $.ajax({
                 url : '{{ route("upload") }}',
                 type : 'POST',
@@ -483,6 +498,7 @@
                     const {label,tipe} = columns[properties_index];
                     const res_data = {tipe:tipe,label:label,data:data};
                     if(layer){
+                        console.log("layer.features[feature_index]",layer.features,feature_index)
                         layer.features[feature_index].properties[label] = res_data;
                     }
                     if(tipe == "image"){
@@ -505,7 +521,8 @@
                 geojson:JSON.stringify(geojson),
                 property:JSON.stringify(columns)
             }
-            console.log(input)
+            // console.log(input)
+            // return false;
             const btn = $("#simpan");
             const btn_text = btn.text();
             $.ajax({

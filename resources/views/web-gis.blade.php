@@ -104,6 +104,13 @@
         .accordion-header{
             min-width: 200px;
         }
+        /* .measure-tool-svg-overlay{
+            position: absolute;
+            top: -1000px;
+            left: -1000px;
+            width: 8000px;
+            height: 8000px;
+        } */
     </style>
 @endpush
 
@@ -311,7 +318,8 @@
                 })
 
                 map.data.setStyle(function(feature){
-                    return feature.getProperty('style');
+                    let style = feature.getProperty("style") || {};
+                    return {...style,...{zIndex:999999}};
                 })
             }
         })
@@ -426,19 +434,18 @@
             const f = event.feature;
             let contentString = "";
             f.forEachProperty((item,key) => {
-                if(key !== "style")
+                if(key == "style") return;
+                let content = item;
+                if(item.tipe == "image"){
+                    content = `<a target="_blank" href="${item.data}"><img src="${item.data}" height="100" /></a>`
+                }
                 contentString += `<tr>
                     <td>${key}</td>
                     <td>:</td>
-                    <td>${item}</td>
+                    <td>${content}</td>
                 </tr>`
             })
             const str = `<table>${contentString}</table>`;
-            // ib.setContent(str);
-            // ib.setPosition(event.latLng);
-            // ib.setOptions({pixelOffset: new google.maps.Size(0,-34)});
-            // ib.setMap(map);
-            // ib.open();
             infowindow.setContent(str)
             infowindow.setPosition(event.latLng)
             infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
@@ -461,8 +468,8 @@
 
         // Create a marker for each place.
         markers.push(new google.maps.Marker({
-        map: map,
-        position: MyCoor
+            map: map,
+            position: MyCoor
         }));
 
         infowindow.open(map, markers[0]);
