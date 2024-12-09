@@ -23,7 +23,10 @@ Route::get('/rekapitulasi', function () {
     return view('rekapitulasi',$data);
 })->name("rekapitulasi");
 Route::get('/basis-data', [SystemController::class,"basis_data"])->name("basis-data");
-Route::get('/web-gis', function () {return view('web-gis');})->name("web-gis");
+Route::get('/web-gis', function () {
+    $data['pemetaanKategori'] = \App\Models\Pemetaan::get()->groupBy('kategori');
+    return view('web-gis',$data);
+})->name("web-gis");
 Route::get('/esri', function () {return view('esri');})->name("esri");
 Auth::routes();
 

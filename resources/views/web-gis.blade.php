@@ -138,18 +138,22 @@
                         <div id="collapse0" class="accordion-collapse collapse show">
                             <div class="accordion-body">
                                 <div class="layer_data">
-                                    @foreach (\App\Models\Pemetaan::get() as $item)    
-                                    <div class="form-check">
-                                            {!! $item->Icon() !!}
-                                            <input 
-                                                id="layer_{{$item->id}}" class="form-check-input cekbox" 
-                                                type="checkbox" 
-                                                value="{{$item->id}}" 
-                                                name="pemetaan_id">
-                                            <label for="layer_{{$item->id}}" class="form-check-label">
-                                                {{$item->name}} <b>({{ $item->Feature()->count() }})</b>
-                                            </label>
-                                        </div>
+                                    @foreach ($pemetaanKategori as $k => $val)    
+                                        <h5>{{ $k }}</h5>
+                                        @foreach ($val as $item)    
+                                            <div class="form-check" style="margin-left: 5px;">
+                                                {!! $item->Icon() !!}
+                                                <input 
+                                                    id="layer_{{$item->id}}" class="form-check-input cekbox" 
+                                                    type="checkbox" 
+                                                    value="{{$item->id}}" 
+                                                    name="pemetaan_id">
+                                                <label for="layer_{{$item->id}}" class="form-check-label">
+                                                    {{$item->name}} <b>({{ $item->Feature()->count() }})</b>
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                        <hr />
                                     @endforeach
                                 </div>
                             </div>
