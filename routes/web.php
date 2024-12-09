@@ -14,7 +14,10 @@ use App\Http\Controllers\SystemController;
 |
 */
 
-Route::get('/', function () {return view('home');})->name("/");
+Route::get('/', function () {
+    return redirect()->route('web-gis');
+    // return view('home');
+})->name("/");
 Route::get('/rekapitulasi', function () {
     $data["kabupaten"] = \App\Models\Kabupaten::all();
     return view('rekapitulasi',$data);
