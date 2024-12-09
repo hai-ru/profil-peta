@@ -317,7 +317,7 @@
                             lng:geometry.coordinates[0]
                         }
                         map.setCenter(cor)
-                        map.setZoom(13)
+                        map.setZoom(6)
                     }
                 })
 
