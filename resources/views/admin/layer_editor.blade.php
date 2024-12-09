@@ -53,6 +53,7 @@
                 <select class="form-control" name="tipe" required>
                     <option value="text" >Teks</option>
                     <option value="image" >Image</option>
+                    <option value="marker" >Marker</option>
                     <option value="file" >File</option>
                 </select>
             </div>
@@ -368,12 +369,14 @@
                 let column_val = "";
                 let iteration = 0;
                 let key;
-                console.log("index",index);
                 item.forEachProperty( (val, str) => {
                     let tipe = "text"
-                    if(columns[iteration])
-                    tipe = columns[iteration].tipe;
-                    // console.log("tipe",tipe,columns[iteration]);
+                    if(columns[iteration]){
+                        key = columns[iteration];
+                        tipe = columns[iteration].tipe;
+                    }
+                    if(val.tipe)
+                    tipe = val.tipe
                     switch (tipe) {
                         case "file":
                             column_val += `
@@ -384,6 +387,19 @@
                             `
                             break;
                         case "image":
+                            if(val.data)
+                            val = val.data
+                            column_val += `
+                                <td id="atr_${item}_${iteration}">
+                                    <input accept="image/*" type="file" onchange="changeData(${index},${iteration},this,'${tipe}')" />
+                                    <input type="text" readonly name="${key}" value="${val}" />
+                                    <img class="img_preview_atr" src="${val}" />
+                                </td>
+                            `
+                            break;
+                        case "marker":
+                            if(val.data)
+                            val = val.data
                             column_val += `
                                 <td id="atr_${item}_${iteration}">
                                     <input accept="image/*" type="file" onchange="changeData(${index},${iteration},this,'${tipe}')" />
@@ -399,7 +415,7 @@
                             key = "";
 
                             column_val += `
-                                <td id="atr_${item}_${iteration}"><input type="text" name="${name}" value="${val}" /></td>
+                                <td id="atr_${item}_${iteration}"><input type="text" name="${key}" value="${val}" /></td>
                             `
                             break;
                     }
@@ -468,7 +484,7 @@
                         label:data.name,
                         tipe:data.tipe
                     })
-                    console.log("columns",columns,layer)
+                    // console.log("columns",columns,layer)
                     for(key in layer?.features){
                         let item = layer.features[key]
                         item.properties[data.name] = "";
@@ -495,13 +511,28 @@
                 contentType: false,
                 success : function(data) {
                     $(elm).siblings("input[type=text]").val(data)
-                    const {label,tipe} = columns[properties_index];
-                    const res_data = {tipe:tipe,label:label,data:data};
+                    let {label,tipe} = columns[properties_index];
+                    // res_data = {tipe:,label:label,data:data};
+                    let res_data;
+                    if(!label){
+                        label = columns[properties_index];
+                        res_data = layer.features[feature_index].properties[label]
+                        res_data.data = data;
+                        tipe = res_data.tipe;
+                    }
+
+                    if(label || tipe){
+                        res_data = {tipe:tipe,label:label,data:data};
+                    }
+
                     if(layer){
-                        console.log("layer.features[feature_index]",layer.features,feature_index)
                         layer.features[feature_index].properties[label] = res_data;
                     }
-                    if(tipe == "image"){
+                    if(
+                        tipe == "image" ||
+                        tipe == "marker"
+
+                    ){
                         $(elm).siblings("img").attr("src",data);
                     }
                     if(tipe !== "text"){
