@@ -318,8 +318,16 @@
                 })
 
                 map.data.setStyle(function(feature){
-                    let style = feature.getProperty("style") || {};
-                    return {...style,...{zIndex:999999}};
+                    const style = feature.getProperty("style") || {};
+                    const iconUrl = feature.getProperty("icon") ?? undefined;
+                    let styleMix = {...style,...{zIndex:999999}};
+                    if(iconUrl){
+                        console.log("iconUrl",iconUrl)
+                        styleMix.icon = {
+                            url: iconUrl.data || "https://maps.google.com/mapfiles/ms/icons/red-dot.png", // Default Ikon
+                        }
+                    }
+                    return styleMix;
                 })
             }
         })
@@ -435,6 +443,7 @@
             let contentString = "";
             f.forEachProperty((item,key) => {
                 if(key == "style") return;
+                if(item.tipe == "marker") return;
                 let content = item;
                 if(item.tipe == "image"){
                     content = `<a target="_blank" href="${item.data}"><img src="${item.data}" height="100" /></a>`
