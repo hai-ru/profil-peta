@@ -347,6 +347,12 @@
         const LoadAtribut = () => {
             let column_str = "";
             columns.map((item,i)=>{
+
+                console.log("item",item)
+
+                if(item.label)
+                item = item.label;
+
                 column_str += `<th><input data-index="${i}" class="kolom" readonly id="kolom_${item}" name="${item}" value="${item}" /></th>`
             })
 
@@ -367,6 +373,7 @@
                             `
                             break;
                         case "image":
+                            console.log();
                             column_val += `
                                 <td id="atr_${item}_${iteration}">
                                     <input accept="image/*" type="file" onchange="changeData(${index},${iteration},this,'${tipe}')" />
@@ -443,16 +450,21 @@
         $("#add_column_form").validate({
             submitHandler:function(form){
                 const data = getFormData($(form))
-                return false;
-                columns.push({
-                    label:data.name,
-                    tipe:data.tipe
-                })
-                for(key in layer.features){
-                    let item = layer.features[key]
-                    item.properties[data.name] = "";
+                // console.log("data",data);
+                // return false;
+                try {
+                    columns.push({
+                        label:data.name,
+                        tipe:data.tipe
+                    })
+                    for(key in layer?.features){
+                        let item = layer.features[key]
+                        item.properties[data.name] = "";
+                    }
+                    LoadAtribut()
+                } catch (error) {
+                    console.log(error);
                 }
-                LoadAtribut()
                 $("#tambah_kolom_form").modal("hide")
             }
         })
@@ -470,7 +482,9 @@
                     $(elm).siblings("input[type=text]").val(data)
                     const {label,tipe} = columns[properties_index];
                     const res_data = {tipe:tipe,label:label,data:data};
-                    layer.features[feature_index].properties[label] = res_data;
+                    if(layer){
+                        layer.features[feature_index].properties[label] = res_data;
+                    }
                     if(tipe == "image"){
                         $(elm).siblings("img").attr("src",data);
                     }
