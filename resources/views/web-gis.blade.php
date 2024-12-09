@@ -290,7 +290,9 @@
             success:function(response){
                 if(!response.status) return alert(response.message);
                 response.data.forEach( (elm,index) => {
-                    if(geojson == null) continue;
+                    if(elm.geojson == null) {
+                        continue;
+                    }
                     for(k in elm.geojson.features){
                         if(elm.geojson.features[k].properties === undefined) continue;
                         elm.geojson.features[k].properties.style = elm.marker
