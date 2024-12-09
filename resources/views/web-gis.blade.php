@@ -140,7 +140,7 @@
                                                 value="{{$item->id}}" 
                                                 name="pemetaan_id">
                                             <label for="layer_{{$item->id}}" class="form-check-label">
-                                                {{$item->name}}
+                                                {{$item->name}} <b>({{ $item->Feature()->count() }})</b>
                                             </label>
                                         </div>
                                     @endforeach
