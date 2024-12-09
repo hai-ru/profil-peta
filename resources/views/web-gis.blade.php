@@ -322,14 +322,7 @@
                 })
 
                 map.data.setStyle(function(feature){
-                    // const style = feature.getProperty("style") || {};
-                    const style = {
-                        "fillColor": "#34baeb",
-                        "fillOpacity": 1,
-                        "strokeColor": "#34baeb",
-                        "strokeWeight": "#34baeb"
-                    }
-                    // console.log(style)
+                    const style = feature.getProperty("style") || {};
                     const iconUrl = feature.getProperty("icon") ?? undefined;
                     let styleMix = {...style,...{zIndex:999999}};
                     if(iconUrl){
@@ -337,7 +330,6 @@
                             url: iconUrl.data || "https://maps.google.com/mapfiles/ms/icons/red-dot.png", // Default Ikon
                         }
                     }
-                    console.log(styleMix);
                     return styleMix;
                 })
             }
