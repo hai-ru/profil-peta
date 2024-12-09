@@ -323,7 +323,7 @@
 
                 map.data.setStyle(function(feature){
                     const style = feature.getProperty("style") || {};
-                    console.log(style)
+                    // console.log(style)
                     const iconUrl = feature.getProperty("icon") ?? undefined;
                     let styleMix = {...style,...{zIndex:999999}};
                     if(iconUrl){
@@ -331,6 +331,7 @@
                             url: iconUrl.data || "https://maps.google.com/mapfiles/ms/icons/red-dot.png", // Default Ikon
                         }
                     }
+                    console.log(styleMix);
                     return styleMix;
                 })
             }
