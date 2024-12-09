@@ -309,16 +309,16 @@
                         elm.geojson.features[k].properties.style = elm.marker
                     }
                     map.data.addGeoJson(elm.geojson,elm.name)
-                    if(index+1 === response.data.length){
-                        const center = turf.center(elm.geojson);
-                        const{geometry} = center
-                        const cor ={
-                            lat:geometry.coordinates[1],
-                            lng:geometry.coordinates[0]
-                        }
-                        map.setCenter(cor)
-                        map.setZoom(6)
-                    }
+                    // if(index+1 === response.data.length){
+                    //     const center = turf.center(elm.geojson);
+                    //     const{geometry} = center
+                    //     const cor ={
+                    //         lat:geometry.coordinates[1],
+                    //         lng:geometry.coordinates[0]
+                    //     }
+                    //     map.setCenter(cor)
+                    //     map.setZoom(8)
+                    // }
                 })
 
                 map.data.setStyle(function(feature){
