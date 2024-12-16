@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SystemController;
+use Illuminate\Http\Request;
+use DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +18,8 @@ use App\Http\Controllers\SystemController;
 
 Route::get('/', function () {
     return redirect()->route('web-gis');
-    // return view('home');
 })->name("/");
+
 Route::get('/rekapitulasi', function () {
     $data["kabupaten"] = \App\Models\Kabupaten::all();
     return view('rekapitulasi',$data);
@@ -28,6 +30,25 @@ Route::get('/web-gis', function () {
     return view('web-gis',$data);
 })->name("web-gis");
 Route::get('/esri', function () {return view('esri');})->name("esri");
+
+Route::get('/kompas-ternak/kabupaten', function () {
+    $data['tahun'] = DB::table('kompas_ternak_kabupaten')->groupBy('tahun')->get()->pluck('tahun');
+    return view('kompas_ternak_kab',$data);
+})->name("kompas_ternak_kab");
+
+Route::get('/kompas-ternak/kabupaten/service', function (Request $request) {
+    $tahun = $request->tahun ?? "";
+    $data = DB::table('kompas_ternak_kabupaten')
+    ->select('*','kabupaten_kotas.geojson')
+    ->where('tahun',$tahun)
+    ->join('kabupaten_kotas', 'kabupaten_kotas.id', '=', 'kompas_ternak_kabupaten.kabupaten_id')
+    ->get();
+    return [
+        'status'=>true,
+        'data'=>$data
+    ];
+})->name("kompas_ternak_kab.service");
+
 Auth::routes();
 
 Route::get('laporan', function() {
@@ -149,3 +170,5 @@ Route::get('data/sektor',[SystemController::class,"sektor_data"])->name('sektor.
 
 Route::get("cdn",[SystemController::class,"cdn"])->name("cdn");
 Route::get("test",[SystemController::class,"test"]);
+
+// Route::get("olah_kompas_ternak_kabupaten",[SystemController::class,"olah_kompas_ternak_kabupaten"]);

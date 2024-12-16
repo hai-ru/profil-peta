@@ -15,7 +15,6 @@ class SystemController extends Controller
             $url = getenv("APP_URL");
             return $url.$path;
         } catch (\Exception $e) {
-            // throw $th;
             return $e->getMessage();
         }
     }
@@ -165,7 +164,6 @@ class SystemController extends Controller
                 $r->update($data);
                 return ["status"=>"success","message"=>"Data berhasil diubah"];
             }
-            // return $data;
             \App\Models\rekap::create($data);
             return ["status"=>"success","message"=>"Data berhasil ditambahkan"];
         } catch (\Throwable $th) {
@@ -262,7 +260,6 @@ class SystemController extends Controller
             DB::commit();
             return ["status"=>"success","message"=>"Data berhasil ditambahkan"];
         } catch (\Throwable $th) {
-            // DB::rollback();
             return ["status"=>"error","message"=>$th->getMessage(),"line"=>$th->getLine()];
         }
     }
@@ -273,7 +270,6 @@ class SystemController extends Controller
             $p = \App\Models\Pemetaan::findorfail($request->pemetaan_id);
             return ["status"=>true,"data"=>$p];
         } catch (\Throwable $th) {
-            //throw $th;
             return ["status"=>false,"message"=>$th->getMessage(),"line"=>$th->getLine()];
         }
     }
@@ -282,10 +278,9 @@ class SystemController extends Controller
     {
         try {
             $p = \App\Models\Pemetaan::findorfail($request->pemetaan_id) ?? \App\Models\Pemetaan::first();
-            // DD($p->feature());
             return datatables()->of($p->feature()->select("id","property"))->make(true);
         } catch (\Throwable $th) {
-            //throw $th;
+            return ["status"=>true,"message"=>$th->getMessage()];
         }
     }
 
@@ -302,7 +297,6 @@ class SystemController extends Controller
                 "data"=>$data
             ];
         } catch (\Throwable $th) {
-            //throw $th;
             return ["status"=>false,"message"=>$th->getMessage(),"line"=>$th->getLine()];
         }
     }
@@ -317,8 +311,32 @@ class SystemController extends Controller
             \App\Models\config::first()->update($data);
             return ["status"=>"success","message"=>"Data berhasil disimpan."];
         } catch (\Throwable $th) {
-            //throw $th;
             return ["status"=>"error","message"=>$th->getMessage(),"line"=>$th->getLine()];
         }
     }
+
+    public function olah_kompas_ternak_kabupaten(Request $request) {
+        try {
+            $list_kabupaten = DB::table('kompas_ternak_kabupaten')
+            ->where('kabupaten_id',0)
+            ->get();
+            foreach ($list_kabupaten as $key => $value) {
+                $p = json_decode( json_encode($value), true );
+                $search = $p['COL 3'] ?? "";
+                $val = DB::table('kabupaten_kotas')
+                ->where('nama','like',"%$search%")
+                ->first();
+                if(!empty($val)){
+                    DB::update(
+                        "UPDATE `kompas_ternak_kabupaten` SET `kabupaten_id`= ? WHERE `id` = ?",
+                        [$val->id,$value->id]
+                    );
+                }
+            }
+            return ["status"=>"success","message"=>"Data berhasil disimpan."];
+        } catch (\Throwable $th) {
+            return ["status"=>"error","message"=>$th->getMessage(),"line"=>$th->getLine()];
+        }
+    }
+
 }
