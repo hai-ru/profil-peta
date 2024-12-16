@@ -343,4 +343,28 @@ class SystemController extends Controller
         }
     }
 
+    function olah_kecamatan(Request $request){
+        try {
+            $list_kabupaten = DB::table('kompas_ternak_kabupaten')
+            ->where('kabupaten_id',0)
+            ->get();
+            foreach ($list_kabupaten as $key => $value) {
+                $p = json_decode( json_encode($value), true );
+                $search = $p['COL 3'] ?? "";
+                $val = DB::table('kabupaten_kotas')
+                ->where('nama','like',"%$search%")
+                ->first();
+                if(!empty($val)){
+                    DB::update(
+                        "UPDATE `kompas_ternak_kabupaten` SET `kabupaten_id`= ? WHERE `id` = ?",
+                        [$val->id,$value->id]
+                    );
+                }
+            }
+            return ["status"=>"success","message"=>"Data berhasil disimpan."];
+        } catch (\Throwable $th) {
+            return ["status"=>"error","message"=>$th->getMessage(),"line"=>$th->getLine()];
+        }
+    }
+
 }

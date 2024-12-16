@@ -32,6 +32,38 @@ Route::get('/web-gis', function () {
 })->name("web-gis");
 Route::get('/esri', function () {return view('esri');})->name("esri");
 
+Route::get('/simpul-ternak', function () {
+
+    $data['tahun'] = DB::table('simpul_ternak_kabupaten')
+    ->groupBy('tahun')
+    ->get()
+    ->pluck('tahun');
+    $data['komoditi'] = DB::table('simpul_ternak_kabupaten')
+    ->groupBy('komoditi')
+    ->get()
+    ->pluck('komoditi');
+
+    return view('simpul_ternak_kab',$data);
+})->name("simpul_ternak_kab");
+
+Route::get('/simpul-ternak/service', function (Request $request) {
+    $tahun = $request->tahun ?? "";
+    $komoditi = $request->komoditi ?? "";
+    $data = DB::table('simpul_ternak_kabupaten')
+    ->select('*','kabupaten_kotas.geojson')
+    ->where([
+        'tahun'=>$tahun,
+        'komoditi'=>$komoditi,
+    ])
+    ->join('kabupaten_kotas', 'kabupaten_kotas.id', '=', 'simpul_ternak_kabupaten.kabupaten_id')
+    ->get();
+    return [
+        'status'=>true,
+        'data'=>$data
+    ];
+});
+
+
 Route::get('/kompas-ternak/kabupaten', function () {
 
     $data['tahun'] = DB::table('kompas_ternak_kabupaten')
@@ -56,6 +88,33 @@ Route::get('/kompas-ternak/kabupaten/service', function (Request $request) {
         'data'=>$data
     ];
 })->name("kompas_ternak_kab.service");
+
+Route::get('/potret-ternak', function (Request $request) {
+
+    $data['kab_kota'] = DB::table('potret_pakan_marker')
+    ->groupBy('Kabupaten/Kota')
+    ->get()
+    ->pluck('Kabupaten/Kota');
+
+    return view('potret_ternak',$data);
+
+})->name("potret_ternak");
+
+Route::get('/potret-ternak/service', function (Request $request) {
+
+    $data = DB::table('potret_pakan_marker');
+
+    if($request->kab_kota){
+        $data = $data->where('Kabupaten/Kota',$request->kab_kota);
+    }
+
+    $data = $data->get();
+
+    return [
+        'status'=>true,
+        'data'=>$data
+    ];
+});
 
 Route::get('/kompas-ternak/kecamatan', function (Request $request) {
 
