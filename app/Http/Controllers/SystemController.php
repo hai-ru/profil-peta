@@ -126,17 +126,21 @@ class SystemController extends Controller
         ->firstorfail();
     }
 
+    function randomColor()
+    {
+        return '#' . substr(str_shuffle('ABCDEF0123456789'), 0, 6);
+    }
+
     public function test()
     {
-        $desa = \App\Models\Desa::all();
-        $data = [];
-        foreach($desa as $item){
-            $tematik = \App\Models\Tematik::all();
-            foreach ($tematik as $key => $value) {
-                $data[] = ["desa_id"=>$item->id,"tematik_id"=>$value->id];
-            }
+        $val = DB::table('kabupaten_kotas')->get();
+        foreach ($val as $key => $value) {
+            $warna = $this->randomColor();
+            DB::update(
+                "UPDATE `kabupaten_kotas` SET `warna`= ? WHERE `id` = ?",
+                [$warna,$value->id]
+            );
         }
-        return \App\Models\DataPetaDesa::insert($data);
     }
 
     public function peta_data_editor(Request $request)

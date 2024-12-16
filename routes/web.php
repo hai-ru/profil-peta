@@ -32,7 +32,14 @@ Route::get('/web-gis', function () {
 Route::get('/esri', function () {return view('esri');})->name("esri");
 
 Route::get('/kompas-ternak/kabupaten', function () {
-    $data['tahun'] = DB::table('kompas_ternak_kabupaten')->groupBy('tahun')->get()->pluck('tahun');
+
+    $data['tahun'] = DB::table('kompas_ternak_kabupaten')
+    ->groupBy('tahun')
+    ->get()
+    ->pluck('tahun');
+
+    $data['list_kota'] = DB::table('kabupaten_kotas')->get();
+
     return view('kompas_ternak_kab',$data);
 })->name("kompas_ternak_kab");
 

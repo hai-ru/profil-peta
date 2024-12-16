@@ -137,17 +137,30 @@
                         </h2>
                         <div id="collapse0" class="accordion-collapse collapse show">
                             <div class="accordion-body">
+                                <div class="form-group">
+                                    <label>Tahun</label>
+                                    <select id="tahun" class="form-control">
+                                        @foreach ($tahun as $item)
+                                        <option value="{{ $item }}">
+                                            {{ $item }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="layer_data">
-                                    <div class="form-group">
-                                        <label>Tahun</label>
-                                        <select id="tahun" class="form-control">
-                                            @foreach ($tahun as $item)
-                                                <option value="{{ $item }}">
-                                                    {{ $item }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                    @foreach ($list_kota as $item)
+                                        <div class="form-check" style="margin-left: 5px;">
+                                            <div style='
+                                            height: 10px;
+                                            width: 21px;
+                                            border: 1px solid {{$item->warna}};
+                                            background: {{$item->warna}};
+                                            display: inline-block;'></div>
+                                            <label for="layer_{{$item->id}}" class="form-check-label">
+                                                {{$item->nama}}
+                                            </label>
+                                        </div> 
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -312,7 +325,7 @@
                         delete properties.id;
                         delete properties.kabupaten_id;
                         geojson.properties = properties;
-                        console.log("geojson",geojson);
+                        // console.log("geojson",geojson);
                     } catch (error) {
                         geojson = null
                     }
@@ -325,15 +338,14 @@
                 })
 
                 map.data.setStyle(function(feature){
-                    const style = feature.getProperty("style") || {};
-                    const iconUrl = feature.getProperty("icon") ?? undefined;
-                    let styleMix = {...style,...{zIndex:999999}};
-                    if(iconUrl){
-                        styleMix.icon = {
-                            url: iconUrl.data || "https://maps.google.com/mapfiles/ms/icons/red-dot.png", // Default Ikon
-                        }
+                    const warna = feature.getProperty("warna") || {};
+                    return {
+                        strokeColor: warna,
+                        strokeOpacity: 1.0,
+                        strokeWeight: 3.0,
+                        fillColor: warna,
+                        fillOpacity: 0.5
                     }
-                    return styleMix;
                 })
             }
         })
@@ -545,6 +557,11 @@
 
           $('body').loading('stop');
 
+    });
+
+    $(document).ready(function(){
+        $('#btn-control').click();
+        $("#tahun").trigger('change');
     });
 
 </script>
