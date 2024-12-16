@@ -89,6 +89,31 @@ Route::get('/kompas-ternak/kabupaten/service', function (Request $request) {
     ];
 })->name("kompas_ternak_kab.service");
 
+Route::get('/formasi-ternak', function () {
+
+    $data['tahun'] = DB::table('formasi_ternak')
+    ->groupBy('tahun')
+    ->get()
+    ->pluck('tahun');
+
+    $data['list_kota'] = DB::table('kabupaten_kotas')->get();
+
+    return view('formasi_ternak',$data);
+})->name("formasi_ternak");
+
+Route::get('/formasi-ternak/service', function (Request $request) {
+    $tahun = $request->tahun ?? "";
+    $data = DB::table('formasi_ternak')
+    ->select('*','kabupaten_kotas.geojson')
+    ->where('tahun',$tahun)
+    ->join('kabupaten_kotas', 'kabupaten_kotas.id', '=', 'formasi_ternak.kabupaten_id')
+    ->get();
+    return [
+        'status'=>true,
+        'data'=>$data
+    ];
+})->name("formasi_ternak.service");
+
 Route::get('/potret-ternak', function (Request $request) {
 
     $data['kab_kota'] = DB::table('potret_pakan_marker')

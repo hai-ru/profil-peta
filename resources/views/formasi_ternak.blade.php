@@ -137,7 +137,6 @@
                         </h2>
                         <div id="collapse0" class="accordion-collapse collapse show">
                             <div class="accordion-body">
-
                                 <div class="form-group">
                                     <label>Tahun</label>
                                     <select id="tahun" class="form-control">
@@ -148,35 +147,20 @@
                                         @endforeach
                                     </select>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>Kabupaten</label>
-                                    <select id="kabupaten" class="form-control">
-                                        @foreach ($kabupaten as $item)
-                                        <option value="{{ $item }}">
-                                            {{ $item }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                
                                 <div class="layer_data">
-
-                                    @foreach ($list_skor as $item)
+                                    @foreach ($list_kota as $item)
                                         <div class="form-check" style="margin-left: 5px;">
                                             <div style='
                                             height: 10px;
                                             width: 21px;
-                                            border: 1px solid {{$item['warna']}};
-                                            background: {{$item['warna']}};
+                                            border: 1px solid {{$item->warna}};
+                                            background: {{$item->warna}};
                                             display: inline-block;'></div>
-                                            <label for="layer_{{$item['val']}}" class="form-check-label">
-                                                {{$item['nama']}}
-                                                {{-- (<span id="skoring_{{$item['val']}}">0</span>) --}}
+                                            <label for="layer_{{$item->id}}" class="form-check-label">
+                                                {{$item->nama}}
                                             </label>
                                         </div> 
                                     @endforeach
- 
                                 </div>
                             </div>
                         </div>
@@ -315,33 +299,17 @@
     }
 
     $("#tahun").change(function(){
-        loadData();
+        const tahun = $(this).val();
+        loadData(tahun);
     });
-    $("#kabupaten").change(function(){
-        loadData();
-    });
-
-    let listData = {
-        "satu":0,
-        "dua":0,
-        "tiga":0,
-    }
 
     const loadData = (year) => {
         UnloadMap();
-        const tahun = $("#tahun").val();
-        const kabupaten = $("#kabupaten").val();
-        const link = `/kompas-ternak/kecamatan/service?tahun=${tahun}&kabupaten=${kabupaten}`;
         $.ajax({
-            url:link,
+            url:`/formasi-ternak/service?tahun=${year}`,
             type:"GET",
             success:function(response){
 
-                listData = {
-                    "satu":0,
-                    "dua":0,
-                    "tiga":0,
-                }
                 
                 if(!response.status) 
                 return alert(response.message);
@@ -353,10 +321,11 @@
                         geojson = JSON.parse(elm.geojson);
                         let properties = elm;
                         delete properties.geojson;
-                        delete properties.kabupaten_kotas_id;
+                        delete properties.center;
                         delete properties.id;
-                        delete properties.kecamatan_id;
+                        delete properties.kabupaten_id;
                         geojson.properties = properties;
+                        // console.log("geojson",geojson);
                     } catch (error) {
                         geojson = null
                     }
@@ -369,25 +338,7 @@
                 })
 
                 map.data.setStyle(function(feature){
-                    let skoring = parseInt(feature.getProperty("SKORING") || 0);
-                    let warna = "#000";
-                    switch (skoring) {
-                        case 1:
-                            warna = "#f54242"
-                            listData.satu++;
-                            break;
-                        case 2:
-                            warna = "#4287f5"
-                            listData.dua++;
-                            break;
-                        case 3:
-                            warna = "#42f55a"
-                            listData.tiga++;
-                            break;
-                    }
-                    // $("#skoring_1").text(listData.satu);
-                    // $("#skoring_2").text(listData.dua);
-                    // $("#skoring_3").text(listData.tiga);
+                    const warna = feature.getProperty("warna") || {};
                     return {
                         strokeColor: warna,
                         strokeOpacity: 1.0,
@@ -610,7 +561,7 @@
 
     $(document).ready(function(){
         $('#btn-control').click();
-        loadData();
+        $("#tahun").trigger('change');
     });
 
 </script>
