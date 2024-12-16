@@ -13,18 +13,18 @@ class CreateKecamatansTable extends Migration
      */
     public function up()
     {
-        Schema::create('kecamatans', function (Blueprint $table) {
-            $table->id();
-            $table->string("name");
-            $table->timestamps();
+        // Schema::create('kecamatans', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string("name");
+        //     $table->timestamps();
 
-            $table->foreignId("kabupaten_id")
-            ->references('id')
-            ->on('kabupatens')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+        //     $table->foreignId("kabupaten_id")
+        //     ->references('id')
+        //     ->on('kabupatens')
+        //     ->onUpdate('cascade')
+        //     ->onDelete('cascade');
 
-        });
+        // });
     }
 
     /**
@@ -34,6 +34,6 @@ class CreateKecamatansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kecamatans');
+        // Schema::dropIfExists('kecamatans');
     }
 }
