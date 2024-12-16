@@ -299,15 +299,11 @@
     })
 
     const UnloadMap = () => {
-        map.data.forEach(function(feature) {
-            map.data.remove(feature);
-        });
+        markers.forEach((marker) => marker.setMap(null)); // Hapus dari peta
+        markers = []; // Kosongkan array
     }
 
-    $("#tahun").change(function(){
-        loadData();
-    });
-    $("#kabupaten").change(function(){
+    $("#kab_kota").change(function(){
         loadData();
     });
 
@@ -316,6 +312,8 @@
         "dua":0,
         "tiga":0,
     }
+
+    // let markers = [];
 
     const loadData = (year) => {
         UnloadMap();
@@ -329,34 +327,72 @@
                 if(!response.status) 
                 return alert(response.message);
 
-                response.data.forEach( (elm,index) => {
-                    const nama = elm['Nama Perusahaan'];
-                    const koor = elm['Titik Koordinat'].split(',');
-                    const geojson = {
-                    "type": "FeatureCollection",
-                    "features": [
-                        {
-                            "type": "Feature",
-                            "geometry": {
-                                "type": "Point",
-                                "coordinates": [parseFloat(koor[0]), parseFloat(koor[1])]
-                            },
-                            "properties": elm
+                // response.data.forEach( (elm,index) => {
+                //     const nama = elm['Nama Perusahaan'];
+                //     const koor = elm['Titik Koordinat'].split(',');
+                //     const geojson = {
+                //     "type": "FeatureCollection",
+                //     "features": [
+                //         {
+                //             "type": "Feature",
+                //             "geometry": {
+                //                 "type": "Point",
+                //                 "coordinates": [parseFloat(koor[0]), parseFloat(koor[1])]
+                //             },
+                //             "properties": elm
                             
-                        }
-                    ]};
-                    console.log(geojson)
-                    map.data.addGeoJson(
-                        geojson,
-                        nama
-                    )
-                })
+                //         }
+                //     ]};
+                //     console.log(geojson)
+                //     map.data.addGeoJson(
+                //         geojson,
+                //         nama
+                //     )
+                // })
 
-                map.data.setStyle(function(feature){
-                    return {
-                        zIndex:99999
-                    }
-                })
+                // map.data.setStyle(function(feature){
+                //     return {
+                //         zIndex:99999
+                //     }
+                // })
+
+                const infoWindow = new google.maps.InfoWindow({
+                    content: "",
+                    disableAutoPan: true,
+                });
+
+                response.data.map((elm, i) => {
+                    const koor = elm['Titik Koordinat'].split(',');
+                    const position =  { lat: parseFloat(koor[0]), lng: parseFloat(koor[1]) };
+                    const pinGlyph = new google.maps.marker.PinElement({
+                        glyphColor: "white",
+                    });
+                    const marker = new google.maps.marker.AdvancedMarkerElement({
+                        map,
+                        position,
+                        content: pinGlyph.element,
+                    });
+
+                    // markers can only be keyboard focusable when they have click listeners
+                    // open info window when marker is clicked
+                    marker.addListener("click", () => {
+                        let item = '';
+                        for(const k in elm){
+                            const val = elm[k]
+                            item += `<tr>
+                                <td>${k}</td>
+                                <td>:</td>
+                                <td>${val}</td>
+                            </tr>`;
+                        }
+                        const content = `<table>${item}</table>`;
+                        infoWindow.setContent(content);
+                        infoWindow.open(map, marker);
+                    });
+
+                    markers.push(marker);
+                });
+
             }
         })
     }
@@ -381,6 +417,7 @@
         map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: -0.10814501846297607, lng: 109.3182775878906},
             zoom: zooms,
+            mapId:"48794045fb603cfd",
             mapTypeId: google.maps.MapTypeId.HYBRID,
             mapTypeControl: true,
             mapTypeControlOptions: {
@@ -576,5 +613,5 @@
 
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZzzDr8qs1sU2cxVAk-ewxecN9dBpqirc&callback=initMap&libraries=geometry,places" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZzzDr8qs1sU2cxVAk-ewxecN9dBpqirc&callback=initMap&libraries=geometry,places,marker" async defer></script>
 @endpush
