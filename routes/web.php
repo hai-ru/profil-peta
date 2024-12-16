@@ -17,7 +17,8 @@ use DB;
 */
 
 Route::get('/', function () {
-    return redirect()->route('web-gis');
+    // return redirect()->route('web-gis');
+    return redirect()->to('kompas-ternak/kabupaten');
 })->name("/");
 
 Route::get('/rekapitulasi', function () {
@@ -55,6 +56,60 @@ Route::get('/kompas-ternak/kabupaten/service', function (Request $request) {
         'data'=>$data
     ];
 })->name("kompas_ternak_kab.service");
+
+Route::get('/kompas-ternak/kecamatan', function (Request $request) {
+
+    $data['tahun'] = DB::table('kompas_ternak_kecamatan')
+    ->groupBy('tahun')
+    ->get()
+    ->pluck('tahun');
+
+    $data['kabupaten'] = DB::table('kompas_ternak_kecamatan')
+    ->groupBy('kabupaten')
+    ->get()
+    ->pluck('kabupaten');
+
+    $data['list_skor'] = [
+        [
+            'val'=>1,
+            'nama'=>"SKORING 1",
+            'warna'=>"#f54242",
+        ],
+        [
+            'val'=>2,
+            'nama'=>"SKORING 2",
+            'warna'=>"#4287f5",
+        ],
+        [
+            'val'=>3,
+            'nama'=>"SKORING 3",
+            'warna'=>"#42f55a",
+        ],
+    ];
+
+    return view('kompas_ternak_kec',$data);
+
+})->name("kompas_ternak_kecamatan");
+
+Route::get('/kompas-ternak/kecamatan/service', function (Request $request) {
+
+    $tahun = $request->tahun ?? "";
+    $kabupaten = $request->kabupaten ?? "";
+    $data = DB::table('kompas_ternak_kecamatan')
+    ->select('*','kecamatans.geojson')
+    ->where([
+        'tahun'=>$tahun,
+        'kabupaten'=>$kabupaten,
+    ])
+    ->join('kecamatans', 'kecamatans.id', '=', 'kompas_ternak_kecamatan.kecamatan_id')
+    ->get();
+
+    return [
+        'status'=>true,
+        'data'=>$data
+    ];
+
+})->name("kompas_ternak_kecamatan.service");
 
 Auth::routes();
 
