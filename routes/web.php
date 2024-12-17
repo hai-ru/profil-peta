@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SystemController;
 use Illuminate\Http\Request;
-use DB;
+// use DB;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,116 @@ Route::get('/simpul-ternak/service', function (Request $request) {
         'komoditi'=>$komoditi,
     ])
     ->join('kabupaten_kotas', 'kabupaten_kotas.id', '=', 'simpul_ternak_kabupaten.kabupaten_id')
+    ->get();
+    return [
+        'status'=>true,
+        'data'=>$data
+    ];
+});
+
+Route::get('/siap-mbg', function () {
+
+    $data['kabupaten'] = DB::table('siap_mbg_ternak')
+    ->groupBy('kabupaten')
+    ->get()
+    ->pluck('kabupaten');
+
+    $data['list_skor'] = [
+        [
+            'val'=>1,
+            'nama'=>"TIDAK CUKUP",
+            'warna'=>"#f5ec42",
+        ],
+        [
+            'val'=>2,
+            'nama'=>"CUKUP",
+            'warna'=>"#66f542",
+        ],
+        [
+            'val'=>3,
+            'nama'=>"SANGAT CUKUP",
+            'warna'=>"#156b00",
+        ],
+    ];
+
+    return view('siap_mbg',$data);
+})->name("siap_mbg");
+
+Route::get('/siap-mbg/service', function (Request $request) {
+    $kabupaten = $request->kabupaten ?? "";
+    $data = DB::table('siap_mbg_ternak')
+    ->select('*','kecamatans.geojson')
+    ->where([
+        'kabupaten'=>$kabupaten,
+    ])
+    ->join('kecamatans', 'kecamatans.id', '=', 'siap_mbg_ternak.kecamatan_id')
+    ->get();
+    return [
+        'status'=>true,
+        'data'=>$data
+    ];
+});
+
+Route::get('/sri-sarah-lestari', function () {
+
+    $data['kabupaten'] = DB::table('sri-ternak')
+    ->groupBy('kabupaten')
+    ->get()
+    ->pluck('kabupaten');
+
+    $data['list_skor'] = [
+        [
+            'val'=>0,
+            'nama'=>"Sangat Sesuai",
+            'warna'=>"#17ad00",
+        ],
+        [
+            'val'=>1,
+            'nama'=>"Sangat Tidak Sesuai",
+            'warna'=>"#fc0303",
+        ],
+        [
+            'val'=>2,
+            'nama'=>"Sedang",
+            'warna'=>"#ad8500",
+        ],
+        [
+            'val'=>3,
+            'nama'=>"Sesuai",
+            'warna'=>"#618f31",
+        ],
+        [
+            'val'=>4,
+            'nama'=>"Tidak Sesuai",
+            'warna'=>"#8f3131",
+        ],
+    ];
+
+    return view('sri_sarah_lestari',$data);
+})->name("sri-sarah-lestari");
+
+Route::get('/sri-sarah-lestari/service', function (Request $request) {
+    $kabupaten = $request->kabupaten ?? "";
+    $jenis = null;
+    $simulasi_rancangan_investasi_sri = null;
+    if($request->jenis){
+        $jenisSplit = explode("/",$request->jenis);
+        $jenis = $jenisSplit[0];
+        $simulasi_rancangan_investasi_sri = $jenisSplit[1];
+    }
+
+    if(!empty($simulasi_rancangan_investasi_sri)){
+        $simulasi_rancangan_investasi_sri = $simulasi_rancangan_investasi_sri." ekor";
+    }
+
+    $data = DB::table('sri-ternak')
+    ->select('*','kecamatans.geojson')
+    ->where([
+        'kabupaten'=>$kabupaten,
+        'jenis_investasi'=>$jenis,
+        'simulasi_rancangan_investasi_sri'=>$simulasi_rancangan_investasi_sri
+    ])
+    ->join('kecamatans', 'kecamatans.id', '=', 'sri-ternak.kecamatan_id')
     ->get();
     return [
         'status'=>true,
