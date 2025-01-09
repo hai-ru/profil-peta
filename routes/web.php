@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\DataTernakController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SystemController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 // use DB;
 use Illuminate\Support\Facades\DB;
 
@@ -365,6 +367,8 @@ Route::group(["middleware" => "auth", "prefix" => "admin"], function () {
     Route::get('pemetaan/potret-ternak', function () {
         return view('admin.potret_ternak');
     })->name('pemetaan.potret_ternak');
+
+    Route::post('/upload-sipakis', [DataTernakController::class, 'upload'])->name('upload.csv');
 
     Route::get("pemetaan/data", [SystemController::class, "pemetaan_data"])->name("pemetaan.data");
     Route::post("pemetaan", [SystemController::class, "pemetaan_store"])->name("pemetaan.store");
