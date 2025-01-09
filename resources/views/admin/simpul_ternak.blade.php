@@ -68,7 +68,7 @@
             var formData = new FormData(this);
             $.ajax({
                 method: "POST",
-                url: "{{ route('upload.csv') }}",
+                url: "{{ route('upload.simpul_ternak') }}",
                 data: formData,
                 contentType: false,
                 processData: false,

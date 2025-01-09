@@ -34,14 +34,7 @@
             <div class="card-body">
                 <form id="upload_form" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="form-group">
-                        <label for="year">Pilih Tahun</label>
-                        <select class="form-control" id="year" name="year" required>
-                            @for ($year = 2010; $year <= 2099; $year++)
-                                <option value="{{ $year }}">{{ $year }}</option>
-                                @endfor
-                        </select>
-                    </div>
+
                     <div class="form-group">
                         <label for="csv_file">Upload File CSV</label>
                         <input type="file" class="form-control" id="csv_file" name="csv_file" accept=".csv" required />
@@ -68,7 +61,7 @@
             var formData = new FormData(this);
             $.ajax({
                 method: "POST",
-                url: "{{ route('upload.csv') }}",
+                url: "{{ route('upload.sri') }}",
                 data: formData,
                 contentType: false,
                 processData: false,
