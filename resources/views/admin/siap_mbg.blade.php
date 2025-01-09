@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'SIPAKIS')
+@section('title', 'Siap MBG')
 
 @section('content_header')
-<h1 class="m-0 text-dark">SIPAKIS</h1>
+<h1 class="m-0 text-dark">Siap MBG</h1>
 @stop
 
 @section('adminlte_css')
