@@ -297,11 +297,6 @@ return [
             'icon'    => 'fas fa-fw fa-cogs',
             'url'  => '/admin/pengaturan',
         ],
-        [
-            'text' => 'Pengaturan',
-            'icon'    => 'fas fa-fw fa-cogs',
-            'url'  => '/admin/pengaturan',
-        ],
         // [
         //     'text' => 'Peta',
         //     'icon'    => 'fas fa-fw fa-map',
