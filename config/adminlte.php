@@ -258,12 +258,32 @@ return [
             'icon' => 'fas fa-fw fa-map',
             'submenu' => [
                 [
-                    'text' => 'Layer',
+                    'text' => 'SIPAKIS',
                     'url'  => 'admin/pemetaan',
                 ],
                 [
-                    'text' => 'Layer Editor',
-                    'url'  => '/admin/pemetaan/editor',
+                    'text' => 'SIAP MBG',
+                    'url'  => '/admin/pemetaan/siap-mbg',
+                ],
+                [
+                    'text' => 'SRI SARAH LESTARI',
+                    'url'  => '/admin/pemetaan/sri-sarah-lestari',
+                ],
+                [
+                    'text' => 'KOMPAS TERNAK',
+                    'url'  => '/admin/pemetaan/kompas-ternak',
+                ],
+                [
+                    'text' => 'FORMASI TERNAK',
+                    'url'  => '/admin/pemetaan/formasi-ternak',
+                ],
+                [
+                    'text' => 'SIMPUL TERNAK',
+                    'url'  => '/admin/pemetaan/simpul-ternak',
+                ],
+                [
+                    'text' => 'POTRET TERNAK',
+                    'url'  => '/admin/pemetaan/potret-ternak',
                 ],
             ]
         ],
@@ -271,6 +291,11 @@ return [
             'text' => 'Filemanager',
             'icon'    => 'fas fa-fw fa-file-alt',
             'url'  => '/admin/filemanager',
+        ],
+        [
+            'text' => 'Pengaturan',
+            'icon'    => 'fas fa-fw fa-cogs',
+            'url'  => '/admin/pengaturan',
         ],
         [
             'text' => 'Pengaturan',
@@ -415,7 +440,7 @@ return [
                     'location' => 'vendor/datatables-plugins/buttons/css/buttons.bootstrap4.min.css',
                 ],
             ],
-        ],        
+        ],
         'Select2' => [
             'active' => false,
             'files' => [
