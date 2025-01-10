@@ -371,7 +371,8 @@ Route::group(["middleware" => "auth", "prefix" => "admin"], function () {
     Route::post('/upload-sri', [DataTernakController::class, 'upload_sri'])->name('upload.sri');
     Route::post('/upload-formasi-ternak', [DataTernakController::class, 'upload_formasi_ternak'])->name('upload.formasi_ternak');
     Route::post('/upload-simpul-ternak', [DataTernakController::class, 'upload_simpul_ternak'])->name('upload.simpul_ternak');
-
+    Route::post('/upload-potret-ternak', [DataTernakController::class, 'upload_potret_ternak'])->name('upload.potret_ternak');
+    Route::post('/upload-siap-mbg', [DataTernakController::class, 'upload_siap_mbg'])->name('upload.siap_mbg');
     Route::post('/upload-kompas-ternak', [DataTernakController::class, 'upload_kompas_ternak'])->name('upload.kompas_ternak');
 
     Route::get("pemetaan/data", [SystemController::class, "pemetaan_data"])->name("pemetaan.data");

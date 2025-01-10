@@ -32,7 +32,7 @@
         <div class="card">
             <div class="card-header">Upload Data Siap MBG</div>
             <div class="card-body">
-                <form id="upload_form" method="POST" enctype="multipart/form-data">
+                <form action="{{route('upload.siap_mbg')}}" id="upload_form" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="year">Pilih Tahun</label>
@@ -68,7 +68,7 @@
             var formData = new FormData(this);
             $.ajax({
                 method: "POST",
-                url: "{{ route('upload.csv') }}",
+                url: "{{ route('upload.siap_mbg') }}",
                 data: formData,
                 contentType: false,
                 processData: false,
