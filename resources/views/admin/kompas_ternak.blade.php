@@ -51,7 +51,7 @@
                     </div>
                 </form>
                 <div class="form-group d-grid mt-3">
-                    <a href="https://www.google.com/" class="btn btn-secondary">Unduh Template CSV</a>
+                    <a href="/template/kompas_ternak.csv" class="btn btn-secondary">Unduh Template CSV</a>
                 </div>
             </div>
         </div>
