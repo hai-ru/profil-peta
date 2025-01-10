@@ -1,0 +1,99 @@
+﻿tahun;provinsi;kabupaten;jumlah_penduduk;status_neraca;produksi;konsumsi;neraca;komoditi
+2024;Kalimantan Barat;Sambas;648.308;defisit;522.567;706.656;-184.089;Daging Sapi
+2024;Kalimantan Barat;Mempawah;313.046;defisit;99.000;341.220;-242.220;Daging Sapi
+2024;Kalimantan Barat;Sanggau;497.023;defisit;71.123;541.755;-470.632;Daging Sapi
+2024;Kalimantan Barat;Ketapang;581.859;defisit;273.543;634.226;-360.683;Daging Sapi
+2024;Kalimantan Barat;Sintang;446.255;defisit;274.638;486.418;-211.780;Daging Sapi
+2024;Kalimantan Barat;Kapuas Hulu;274.915;surplus;407.320;299.657;107.663;Daging Sapi
+2024;Kalimantan Barat;Bengkayang;294.399;surplus;482.160;320.895;161.265;Daging Sapi
+2024;Kalimantan Barat;Landak;412.263;defisit;90.825;449.367;-358.542;Daging Sapi
+2024;Kalimantan Barat;Sekadau;223.500;surplus;251.536;243.615;7.921;Daging Sapi
+2024;Kalimantan Barat;Melawi;215.508;defisit;113.711;234.904;-121.193;Daging Sapi
+2024;Kalimantan Barat;Kayong Utara;127.346;defisit;94.285;138.807;-44.522;Daging Sapi
+2024;Kalimantan Barat;Kubu Raya;632.949;defisit;79.982;689.914;-609.932;Daging Sapi
+2024;Kalimantan Barat;Pontianak;682.896;surplus;849.438;744.357;105.081;Daging Sapi
+2024;Kalimantan Barat;Singkawang;247.924;surplus;512.540;270.237;242.303;Daging Sapi
+2024;Kalimantan Barat;Sambas;648.308;defisit;6.742.263;8.064.952;-1.322.689;Daging Ayam Ras
+2024;Kalimantan Barat;Mempawah;313.046;surplus;8.018.810;3.894.292;4.124.518;Daging Ayam Ras
+2024;Kalimantan Barat;Sanggau;497.023;defisit;3.218.493;6.182.966;-2.964.473;Daging Ayam Ras
+2024;Kalimantan Barat;Ketapang;581.859;surplus;7.725.230;7.238.326;486.904;Daging Ayam Ras
+2024;Kalimantan Barat;Sintang;446.255;defisit;2.837.006;5.551.412;-2.714.406;Daging Ayam Ras
+2024;Kalimantan Barat;Kapuas Hulu;274.915;surplus;6.179.058;3.419.943;2.759.115;Daging Ayam Ras
+2024;Kalimantan Barat;Bengkayang;294.399;surplus;6.615.830;3.662.324;2.953.506;Daging Ayam Ras
+2024;Kalimantan Barat;Landak;412.263;defisit;1.613.466;5.128.552;-3.515.086;Daging Ayam Ras
+2024;Kalimantan Barat;Sekadau;223.500;defisit;2.605.468;2.780.340;-174.872;Daging Ayam Ras
+2024;Kalimantan Barat;Melawi;215.508;defisit;431.414;2.680.920;-2.249.506;Daging Ayam Ras
+2024;Kalimantan Barat;Kayong Utara;127.346;defisit;818.748;1.584.184;-765.436;Daging Ayam Ras
+2024;Kalimantan Barat;Kubu Raya;632.949;surplus;12.036.733;7.873.886;4.162.847;Daging Ayam Ras
+2024;Kalimantan Barat;Pontianak;682.896;defisit;8.138.092;8.495.226;-357.134;Daging Ayam Ras
+2024;Kalimantan Barat;Singkawang;247.924;defisit;2.449.671;3.084.175;-634.504;Daging Ayam Ras
+2024;Kalimantan Barat;Sambas;648.308;defisit;669.693;6.424.732;-5.755.039;Telur Ayam Ras
+2024;Kalimantan Barat;Mempawah;313.046;surplus;3.561.126;3.102.286;458.840;Telur Ayam Ras
+2024;Kalimantan Barat;Sanggau;497.023;defisit;148.828;4.925.498;-4.776.670;Telur Ayam Ras
+2024;Kalimantan Barat;Ketapang;581.859;defisit;838.845;5.766.223;-4.927.378;Telur Ayam Ras
+2024;Kalimantan Barat;Sintang;446.255;defisit;1.675.304;4.422.387;-2.747.083;Telur Ayam Ras
+2024;Kalimantan Barat;Kapuas Hulu;274.915;defisit;2.531.369;2.724.408;-193.039;Telur Ayam Ras
+2024;Kalimantan Barat;Bengkayang;294.399;defisit;940.235;2.917.494;-1.977.259;Telur Ayam Ras
+2024;Kalimantan Barat;Landak;412.263;defisit;151.121;4.085.526;-3.934.405;Telur Ayam Ras
+2024;Kalimantan Barat;Sekadau;223.500;defisit;118.059;2.214.885;-2.096.826;Telur Ayam Ras
+2024;Kalimantan Barat;Melawi;215.508;defisit;231.178;2.135.684;-1.904.506;Telur Ayam Ras
+2024;Kalimantan Barat;Kayong Utara;127.346;defisit;186.509;1.261.999;-1.075.490;Telur Ayam Ras
+2024;Kalimantan Barat;Kubu Raya;632.949;surplus;7.393.130;6.272.525;1.120.605;Telur Ayam Ras
+2024;Kalimantan Barat;Pontianak;682.896;defisit;318.897;6.767.499;-6.448.602;Telur Ayam Ras
+2024;Kalimantan Barat;Singkawang;247.924;surplus;68.714.691;2.456.927;66.257.764;Telur Ayam Ras
+2024;Kalimantan Barat;Sambas;648.308;defisit;268.590;771.487;-502.897;Daging Ayam Lokal
+2024;Kalimantan Barat;Mempawah;313.046;defisit;20.350;372.525;-352.175;Daging Ayam Lokal
+2024;Kalimantan Barat;Sanggau;497.023;defisit;79.520;591.457;-511.938;Daging Ayam Lokal
+2024;Kalimantan Barat;Ketapang;581.859;defisit;65.273;692.412;-627.139;Daging Ayam Lokal
+2024;Kalimantan Barat;Sintang;446.255;defisit;114.084;531.043;-416.960;Daging Ayam Lokal
+2024;Kalimantan Barat;Kapuas Hulu;274.915;defisit;259.630;327.149;-67.518;Daging Ayam Lokal
+2024;Kalimantan Barat;Bengkayang;294.399;defisit;42.376;350.335;-307.959;Daging Ayam Lokal
+2024;Kalimantan Barat;Landak;412.263;defisit;48.175;490.593;-442.418;Daging Ayam Lokal
+2024;Kalimantan Barat;Sekadau;223.500;defisit;78.180;265.965;-187.785;Daging Ayam Lokal
+2024;Kalimantan Barat;Melawi;215.508;defisit;31.091;256.455;-225.364;Daging Ayam Lokal
+2024;Kalimantan Barat;Kayong Utara;127.346;defisit;71.906;151.542;-79.636;Daging Ayam Lokal
+2024;Kalimantan Barat;Kubu Raya;632.949;defisit;187.747;753.209;-565.462;Daging Ayam Lokal
+2024;Kalimantan Barat;Pontianak;682.896;defisit;149.008;812.646;-663.638;Daging Ayam Lokal
+2024;Kalimantan Barat;Singkawang;247.924;defisit;31.376;295.030;-263.654;Daging Ayam Lokal
+2024;Kalimantan Barat;Sambas;648.308;defisit;65.468;194.492;-129.025;Daging Kambing
+2024;Kalimantan Barat;Mempawah;313.046;defisit;23.062;93.914;-70.852;Daging Kambing
+2024;Kalimantan Barat;Sanggau;497.023;defisit;5.544;149.107;-143.563;Daging Kambing
+2024;Kalimantan Barat;Ketapang;581.859;defisit;34.754;174.558;-139.804;Daging Kambing
+2024;Kalimantan Barat;Sintang;446.255;defisit;7.289;133.877;-126.587;Daging Kambing
+2024;Kalimantan Barat;Kapuas Hulu;274.915;defisit;14.927;82.475;-67.547;Daging Kambing
+2024;Kalimantan Barat;Bengkayang;294.399;defisit;6.940;88.320;-81.380;Daging Kambing
+2024;Kalimantan Barat;Landak;412.263;defisit;6.269;123.679;-117.410;Daging Kambing
+2024;Kalimantan Barat;Sekadau;223.500;defisit;1.222;67.050;-65.828;Daging Kambing
+2024;Kalimantan Barat;Melawi;215.508;defisit;5.759;64.652;-58.894;Daging Kambing
+2024;Kalimantan Barat;Kayong Utara;127.346;defisit;2.228;38.204;-35.975;Daging Kambing
+2024;Kalimantan Barat;Kubu Raya;632.949;defisit;30.888;189.885;-158.997;Daging Kambing
+2024;Kalimantan Barat;Pontianak;682.896;defisit;112.759;204.869;-92.109;Daging Kambing
+2024;Kalimantan Barat;Singkawang;247.924;defisit;20.887;74.377;-53.490;Daging Kambing
+2024;Kalimantan Barat;Sambas;648.308;defisit;148.920;518.646;-369.726;Daging Babi
+2024;Kalimantan Barat;Mempawah;313.046;surplus;497.520;250.437;247.083;Daging Babi
+2024;Kalimantan Barat;Sanggau;497.023;defisit;369.988;397.618;-27.631;Daging Babi
+2024;Kalimantan Barat;Ketapang;581.859;defisit;133.140;465.487;-332.347;Daging Babi
+2024;Kalimantan Barat;Sintang;446.255;defisit;75.539;357.004;-281.465;Daging Babi
+2024;Kalimantan Barat;Kapuas Hulu;274.915;surplus;346.630;219.932;126.698;Daging Babi
+2024;Kalimantan Barat;Bengkayang;294.399;defisit;143.629;235.519;-91.890;Daging Babi
+2024;Kalimantan Barat;Landak;412.263;defisit;81.089;329.810;-248.721;Daging Babi
+2024;Kalimantan Barat;Sekadau;223.500;surplus;196.279;178.800;17.479;Daging Babi
+2024;Kalimantan Barat;Melawi;215.508;defisit;54.758;172.406;-117.648;Daging Babi
+2024;Kalimantan Barat;Kayong Utara;127.346;defisit;2.720;101.877;-99.157;Daging Babi
+2024;Kalimantan Barat;Kubu Raya;632.949;defisit;120.369;506.359;-385.990;Daging Babi
+2024;Kalimantan Barat;Pontianak;682.896;surplus;1.088.640;546.317;542.323;Daging Babi
+2024;Kalimantan Barat;Singkawang;247.924;surplus;612.250;198.339;413.911;Daging Babi
+2024;Kalimantan Barat;Sambas;648.308;defisit;39.962;771.487;-731.525;Daging Babi
+2024;Kalimantan Barat;Mempawah;313.046;defisit;2.938;372.525;-369.587;Daging Babi
+2024;Kalimantan Barat;Sanggau;497.023;defisit;4.113;591.457;-587.344;Daging Babi
+2024;Kalimantan Barat;Ketapang;581.859;defisit;8.588;692.412;-683.824;Daging Babi
+2024;Kalimantan Barat;Sintang;446.255;defisit;5.005;531.043;-526.038;Daging Babi
+2024;Kalimantan Barat;Kapuas Hulu;274.915;defisit;5.252;327.149;-321.897;Daging Babi
+2024;Kalimantan Barat;Bengkayang;294.399;defisit;4.712;350.335;-345.622;Daging Babi
+2024;Kalimantan Barat;Landak;412.263;defisit;995;490.593;-489.598;Daging Babi
+2024;Kalimantan Barat;Sekadau;223.500;defisit;2.636;265.965;-263.329;Daging Babi
+2024;Kalimantan Barat;Melawi;215.508;defisit;1.438;256.455;-255.016;Daging Babi
+2024;Kalimantan Barat;Kayong Utara;127.346;defisit;1.943;151.542;-149.599;Daging Babi
+2024;Kalimantan Barat;Kubu Raya;632.949;defisit;7.182;753.209;-746.028;Daging Babi
+2024;Kalimantan Barat;Pontianak;682.896;defisit;1.213;812.646;-811.433;Daging Babi
+2024;Kalimantan Barat;Singkawang;247.924;defisit;6.814;295.030;-288.216;Daging Babi

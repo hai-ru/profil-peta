@@ -32,13 +32,13 @@
         <div class="card">
             <div class="card-header">Upload Data Formasi Ternak</div>
             <div class="card-body">
-                <form id="upload_form" method="POST" enctype="multipart/form-data">
+                <form action="{{route('upload.formasi_ternak')}}" id="upload_form" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="year">Pilih Tahun</label>
-                        <select class="form-control" id="year" name="year" required>
+                        <select class="form-control" id="year" name="tahun" required>
                             @for ($year = 2010; $year <= 2099; $year++)
-                                <option value="{{ $year }}">{{ $year }}</option>
+                                <option {{$year == date('Y') ? 'selected' : ''}} value="{{ $year }}">{{ $year }}</option>
                                 @endfor
                         </select>
                     </div>
@@ -51,7 +51,7 @@
                     </div>
                 </form>
                 <div class="form-group d-grid mt-3">
-                    <a href="https://www.google.com/" class="btn btn-secondary">Unduh Template CSV</a>
+                    <a href="/template/formasi.csv" class="btn btn-secondary">Unduh Template CSV</a>
                 </div>
             </div>
         </div>

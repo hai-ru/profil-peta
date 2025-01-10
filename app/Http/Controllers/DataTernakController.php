@@ -26,7 +26,7 @@ class DataTernakController extends Controller
 
             // read CSV 
             $file = fopen($path, 'r');
-            $header = fgetcsv($file);
+            $header = fgetcsv($file,0,';');
 
             $expectedHeaders = [
                 'kabupaten',
@@ -44,34 +44,42 @@ class DataTernakController extends Controller
                 'pbp'
             ];
 
-            if ($header !== $expectedHeaders) {
-                return response()->json(['error' => 'Invalid CSV headers'], 422);
-            }
+            DB::beginTransaction();
+            DB::table('sri-ternak')->truncate();
+            while (($row = fgetcsv($file,5000,';')) !== FALSE) {
 
-            while (($row = fgetcsv($file)) !== FALSE) {
                 $data = array_combine($header, $row);
+                
+                $kecamatan = $data['kecamatan'] ?? "";
+                $kabupaten = $data['kabupaten'] ?? "";
+                
+                $kecamatan_data = \App\Models\Kecamatan::where('nama','like',"%$kecamatan%")
+                ->whereHas('kabupaten',function($query) use ($kabupaten){
+                    $query->where('nama','like',"%$kabupaten%");
+                })->first();
+
 
                 // insert to table
-                DB::table('sri_ternak')->insert([
-                    'kabupaten' => $data['kabupaten'],
-                    'kecamatan' => $data['kecamatan'],
-                    'tingkat_kesesuaian_lahan' => $data['tingkat_kesesuaian_lahan'],
-                    'luas_lahan' => $data['luas_lahan'],
-                    'daya_tampung_ternak' => $data['daya_tampung_ternak'],
-                    'nama_unit' => $data['nama_unit'],
-                    'jenis_investasi' => $data['jenis_investasi'],
-                    'simulasi_rancangan_investasi_sri' => $data['simulasi_rancangan_investasi_sri'],
-                    'discount_factor' => $data['discount_factor'],
-                    'irr' => $data['irr'],
-                    'npv' => $data['npv'],
-                    'net_bc' => $data['net_bc'],
-                    'pbp' => $data['pbp'],
-                    'kecamatan_id' => '-'
+                DB::table('sri-ternak')->insert([
+                    'kabupaten' => $data['kabupaten'] ?? "",
+                    'kecamatan' => $data['kecamatan'] ?? "",
+                    'tingkat_kesesuaian_lahan' => $data['tingkat_kesesuaian_lahan'] ?? '',
+                    'luas_lahan' => $data['luas_lahan'] ?? '',
+                    'daya_tampung_ternak' => $data['daya_tampung_ternak'] ?? '',
+                    'nama_unit' => $data['nama_unit'] ?? '',
+                    'jenis_investasi' => $data['jenis_investasi'] ?? '',
+                    'simulasi_rancangan_investasi_sri' => $data['simulasi_rancangan_investasi_sri'] ?? '',
+                    'discount_factor' => $data['discount_factor'] ?? '',
+                    'irr' => $data['irr'] ?? '',
+                    'npv' => $data['npv'] ?? '',
+                    'net_bc' => $data['net_bc'] ?? '',
+                    'pbp' => $data['pbp'] ?? '',
+                    'kecamatan_id' => $kecamatan_data->id ?? null
                 ]);
             }
 
             fclose($file);
-
+            DB::commit();
             return response()->json(['success' => 'Data imported successfully']);
         }
 
@@ -93,7 +101,7 @@ class DataTernakController extends Controller
             $path = $file->getRealPath();
 
             $file = fopen($path, 'r');
-            $header = fgetcsv($file);
+            $header = fgetcsv($file,0,';');
 
             $expectedHeaders = [
                 'provinsi',
@@ -126,17 +134,24 @@ class DataTernakController extends Controller
                 'jenis_ternak',
                 'tahun'
             ];
-            if ($header !== $expectedHeaders) {
-                return response()->json(['error' => 'Invalid CSV headers'], 422);
-            }
             // Process row
-            while (($row = fgetcsv($file)) !== FALSE) {
+            $tahun = $request->input('tahun');
+            DB::beginTransaction();
+            while (($row = fgetcsv($file,5000,';')) !== FALSE) {
                 $data = array_combine($header, $row);
+                $kabupaten = $data['kabupaten'] ?? "";
+                $kabupaten_data = \App\Models\Kabupaten::where(
+                    'nama','like',"%$kabupaten%"
+                )->first();
                 DB::table('formasi_ternak')->updateOrInsert(
-                    ['tahun' => $request->input('tahun')],
                     [
-                        'provinsi' => $data['provinsi'],
-                        'kabupaten' => $data['kabupaten'],
+                        'tahun' => $tahun,
+                        'provinsi' => $data['provinsi'] ?? "",
+                        'kabupaten' => $kabupaten
+                    ],
+                    [
+                        'provinsi' => $data['provinsi'] ?? "",
+                        'kabupaten' => $kabupaten,
                         'bobot_hidup_siap_potong' => $data['bobot_hidup_siap_potong'],
                         'berat_karkas' => $data['berat_karkas'],
                         'berat_daging_murni' => $data['berat_daging_murni'],
@@ -163,12 +178,13 @@ class DataTernakController extends Controller
                         'jenis_pakan_tambahan' => $data['jenis_pakan_tambahan'],
                         'jumlah_pemberian_suplemen_vitamin_obat' => $data['jumlah_pemberian_suplemen_vitamin_obat'],
                         'jenis_ternak' => $data['jenis_ternak'],
-                        'tahun' => $data['tahun'],
-                        'kabupaten_id' => '-'
+                        'tahun' => $tahun,
+                        'kabupaten_id' => $kabupaten_data ?? null
                     ]
                 );
             }
             fclose($file);
+            DB::commit();
             return response()->json(['success' => 'Data imported successfully']);
         }
         return response()->json(['error' => 'File upload failed'], 500);
@@ -192,38 +208,51 @@ class DataTernakController extends Controller
 
             // read the CSV 
             $file = fopen($path, 'r');
-            $header = fgetcsv($file);
+            $header = fgetcsv($file,0,';');
 
-            $expectedHeaders = ['provinsi', 'kabupaten', 'jumlah_penduduk', 'status_neraca', 'produksi', 'konsumsi', 'neraca', 'komoditi'];
+            $expectedHeaders = ['tahun','provinsi', 'kabupaten', 'jumlah_penduduk', 'status_neraca', 'produksi', 'konsumsi', 'neraca', 'komoditi'];
 
-            if ($header !== $expectedHeaders) {
-                return response()->json(['error' => 'Invalid CSV headers'], 422);
-            }
+            // if ($header !== $expectedHeaders) {
+            //     return response()->json(['error' => 'Invalid CSV headers'], 422);
+            // }
 
             // Process  row
-            while (($row = fgetcsv($file)) !== FALSE) {
+            $tahun = $request->input('tahun');
+            DB::beginTransaction();
+            while (($row = fgetcsv($file,5000,';')) !== FALSE) {
+
                 $data = array_combine($header, $row);
 
+
+                $kabupaten = $data['kabupaten'] ?? "";
+                $kabupaten_data = \App\Models\Kabupaten::where(
+                    'nama','like',"%$kabupaten%"
+                )->first();
+
                 //  updateOrInsert 
-                DB::table('simpul_ternak')->updateOrInsert(
-                    ['tahun' => $request->input('tahun')],
+                DB::table('simpul_ternak_kabupaten')->updateOrInsert(
                     [
-                        'provinsi' => $data['provinsi'],
-                        'kabupaten' => $data['kabupaten'],
+                        'tahun' => $tahun,
+                        'provinsi' => $data['provinsi'] ?? "",
+                        'kabupaten' => $kabupaten
+                    ],
+                    [
+                        'provinsi' => $data['provinsi'] ?? "",
+                        'kabupaten' => $kabupaten,
                         'jumlah_penduduk' => $data['jumlah_penduduk'],
                         'status_neraca' => $data['status_neraca'],
                         'produksi' => $data['produksi'],
                         'konsumsi' => $data['konsumsi'],
                         'neraca' => $data['neraca'],
                         'komoditi' => $data['komoditi'],
-                        'tahun' => $data['tahun'],
-                        'kabupaten_id' => '-'
+                        'tahun' => $tahun,
+                        'kabupaten_id' => $kabupaten_data->id
                     ]
                 );
             }
 
             fclose($file);
-
+            DB::commit();
             return response()->json(['success' => 'Data imported successfully']);
         }
 

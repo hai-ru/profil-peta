@@ -3,26 +3,26 @@
 @section('title', 'Simpul Ternak')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Simpul Ternak</h1>
+    <h1 class="m-0 text-dark">Simpul Ternak</h1>
 @stop
 
 @section('adminlte_css')
-<style>
-    .form_input {
-        display: flex;
-        align-self: center;
-        justify-content: center;
-    }
+    <style>
+        .form_input {
+            display: flex;
+            align-self: center;
+            justify-content: center;
+        }
 
-    .form_group {
-        flex: 1;
-        margin: 10px;
-    }
+        .form_group {
+            flex: 1;
+            margin: 10px;
+        }
 
-    .d-grid button {
-        width: 100%;
-    }
-</style>
+        .d-grid button {
+            width: 100%;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -32,14 +32,14 @@
         <div class="card">
             <div class="card-header">Upload Data Simpul Ternak</div>
             <div class="card-body">
-                <form id="upload_form" method="POST" enctype="multipart/form-data">
+                <form action="{{route('upload.simpul_ternak')}}" id="upload_form" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="year">Pilih Tahun</label>
-                        <select class="form-control" id="year" name="year" required>
+                        <select class="form-control" id="year" name="tahun" required>
                             @for ($year = 2010; $year <= 2099; $year++)
-                                <option value="{{ $year }}">{{ $year }}</option>
-                                @endfor
+                                <option {{$year == date('Y') ? 'selected' : ''}} value="{{ $year }}">{{ $year }}</option>
+                            @endfor
                         </select>
                     </div>
                     <div class="form-group">
@@ -51,7 +51,7 @@
                     </div>
                 </form>
                 <div class="form-group d-grid mt-3">
-                    <a href="https://www.google.com/" class="btn btn-secondary">Unduh Template CSV</a>
+                    <a href="/template/simpul.csv" class="btn btn-secondary">Unduh Template CSV</a>
                 </div>
             </div>
         </div>

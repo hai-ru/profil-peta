@@ -32,7 +32,8 @@
         <div class="card">
             <div class="card-header">Upload Data Sri Sarah Lestari</div>
             <div class="card-body">
-                <form id="upload_form" method="POST" enctype="multipart/form-data">
+                <form action="{{route('upload.sri')}}" id="upload_form" method="POST" enctype="multipart/form-data">
+
                     @csrf
 
                     <div class="form-group">
@@ -44,7 +45,7 @@
                     </div>
                 </form>
                 <div class="form-group d-grid mt-3">
-                    <a href="https://www.google.com/" class="btn btn-secondary">Unduh Template CSV</a>
+                    <a href="/template/sri-template.csv" class="btn btn-secondary">Unduh Template CSV</a>
                 </div>
             </div>
         </div>

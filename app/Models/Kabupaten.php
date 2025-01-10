@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Kabupaten extends Model
 {
     use HasFactory;
-    protected $fillable = ["name"];
+    protected $table = 'kabupaten_kotas';
+    protected $fillable = ["nama"];
 }

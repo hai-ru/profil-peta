@@ -461,6 +461,7 @@
             let contentString = "";
             f.forEachProperty((item,key) => {
                 if(key == "style") return;
+                if(item == null)  return;
                 if(item.tipe == "marker") return;
                 let content = item;
                 if(item.tipe == "image"){
