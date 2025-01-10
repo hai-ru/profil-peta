@@ -260,10 +260,12 @@ return [
                 [
                     'text' => 'SIPAKIS',
                     'url'  => 'admin/pemetaan',
+                    'icon' => 'fas fa-leaf',
                 ],
                 [
                     'text' => 'SIAP MBG',
                     'url'  => '/admin/pemetaan/siap-mbg',
+                    'icon' => 'fas fa-hand-rock',
                 ],
                 [
                     'text' => 'SRI SARAH LESTARI',
@@ -271,7 +273,19 @@ return [
                 ],
                 [
                     'text' => 'KOMPAS TERNAK',
-                    'url'  => '/admin/pemetaan/kompas-ternak',
+                    'icon' => 'fas fa-compass',
+                    'submenu' => [
+                        [
+                            'text' => 'Provinsi',
+                            'url'  => '/admin/pemetaan/kompas-ternak',
+                            'icon' => 'fas fa-arrow-circle-right',
+                        ],
+                        [
+                            'text' => 'Kabupaten Kota',
+                            'url'  => '/admin/pemetaan/kompas-ternak/kab_kota',
+                            'icon' => 'fas fa-arrow-circle-right',
+                        ],
+                    ]
                 ],
                 [
                     'text' => 'FORMASI TERNAK',

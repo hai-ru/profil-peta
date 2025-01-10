@@ -258,4 +258,111 @@ class DataTernakController extends Controller
 
         return response()->json(['error' => 'File upload failed'], 500);
     }
+
+    public function upload_kompas_ternak(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'csv_file' => 'required|file|mimes:csv,txt|max:2048',
+            'tahun' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()], 422);
+        }
+
+        // Process  CSV 
+        if ($request->hasFile('csv_file')) {
+            $file = $request->file('csv_file');
+            $path = $file->getRealPath();
+
+            // read the CSV 
+            $file = fopen($path, 'r');
+            $header = fgetcsv($file,0,';');
+
+            $expectedHeaders = [
+                'tahun',
+                'Provinsi',
+                'Kabupaten',
+                'Perkiraan Penduduk',
+                'Perkiraan Konsumsi Daging Ayam Ras',
+                'Target Produksi Daging Ayam Ras',
+                'Target Populasi Ayam Ras Pedaging',
+                'Target Pemotongan Ayam Ras Pedaging',
+                'Perkiraan Konsumsi Telur Ayam Ras',
+                'Target Produksi Telur Ayam Ras',
+                'Target Populasi Ayam Ras Petelur',
+                'Perkiraan Konsumsi Daging Sapi/Kerbau',
+                'Target Produksi Daging Sapi/ Kerbau',
+                'Target Populasi Sapi/Kerbau',
+                'Target Pemotongan Sapi/Kerbau',
+                'Perkiraan Konsumsi Daging Kambing/ Domba',
+                'Target Produksi Daging Kambing/ Domba',
+                'Target Populasi Kambing/ Domba',
+                'Target Pemotongan Kambing/ Domba',
+                'Perkiraan Konsumsi Daging Babi',
+                'Target Produksi Daging Babi',
+                'Target Populasi Babi',
+                'Target Pemotongan Babi',
+                'Perkiraan Konsumsi Daging Ayam Lokal/Buras',
+                'Target Produksi Daging Ayam Lokal/Buras',
+                'Target Populasi Ayam Lokal/Buras',
+                'Target Pemotongan Ayam Lokal/Buras',
+                'Perkiraan Konsumsi Daging Bebek/ Itik',
+                'Target Produksi Daging Bebek/ Itik',
+                'Target Populasi Bebek/ Itik',
+                'Target Pemotongan Bebek/ Itik',
+            ];
+
+            // dd(
+            //     $header,
+            //     count($header),
+            //     $expectedHeaders,
+            //     count($expectedHeaders)
+            // );
+
+            // Process  row
+            $tahun = $request->input('tahun');
+            DB::beginTransaction();
+            while (($row = fgetcsv($file,5000,';')) !== FALSE) {
+
+                $data = array_combine($header, $row);
+                
+                $kabupaten = $data['Kabupaten/Kota'] ?? "";
+                $kabupaten_data = \App\Models\Kabupaten::where(
+                    'nama','like',"%$kabupaten%"
+                )->first();
+                
+                //  updateOrInsert 
+
+                array_unshift($row,$kabupaten_data->id);
+
+                $val = '';
+                foreach ($row as $key => $value) {
+                    $val .= "'".$value."'".',';
+                }
+                $val = rtrim($val,',');
+
+                $check = DB::table('kompas_ternak_kabupaten')->where(
+                    [
+                        'tahun' => $tahun,
+                        'Provinsi' => $data['Provinsi'] ?? "",
+                        'Kabupaten' => $kabupaten
+                    ])->first();
+
+                if(!empty($check)){
+                    DB::table('kompas_ternak_kabupaten')->where('id', $check->id)->delete();
+                }
+                $qry = 'INSERT INTO `kompas_ternak_kabupaten` (`kabupaten_id`, `tahun`, `Provinsi`, `Kabupaten`, `Perkiraan Penduduk`, `Perkiraan Konsumsi Daging Ayam Ras`, `Target Produksi Daging Ayam Ras`, `Target Populasi Ayam Ras Pedaging`, `Target Pemotongan Ayam Ras Pedaging`, `Perkiraan Konsumsi Telur Ayam Ras`, `Target Produksi Telur Ayam Ras`, `Target Populasi Ayam Ras Petelur`, `Perkiraan Konsumsi Daging Sapi/Kerbau`, `Target Produksi Daging Sapi/ Kerbau`, `Target Populasi Sapi/Kerbau`, `Target Pemotongan Sapi/Kerbau`, `Perkiraan Konsumsi Daging Kambing/ Domba`, `Target Produksi Daging Kambing/ Domba`, `Target Populasi Kambing/ Domba`, `Target Pemotongan Kambing/ Domba`, `Perkiraan Konsumsi Daging Babi`, `Target Produksi Daging Babi`, `Target Populasi Babi`, `Target Pemotongan Babi`, `Perkiraan Konsumsi Daging Ayam Lokal/Buras`, `Target Produksi Daging Ayam Lokal/Buras`, `Target Populasi Ayam Lokal/Buras`, `Target Pemotongan Ayam Lokal/Buras`, `Perkiraan Konsumsi Daging Bebek/ Itik`, `Target Produksi Daging Bebek/ Itik`, `Target Populasi Bebek/ Itik`, `Target Pemotongan Bebek/ Itik`) VALUES ('.$val.')';
+                DB::statement($qry);
+            }
+
+            fclose($file);
+            DB::commit();
+            return response()->json(['success' => 'Data imported successfully']);
+        }
+
+        return response()->json(['error' => 'File upload failed'], 500);
+    }
+
+
 }

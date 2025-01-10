@@ -355,9 +355,11 @@ Route::group(["middleware" => "auth", "prefix" => "admin"], function () {
     Route::get('pemetaan/sri-sarah-lestari', function () {
         return view('admin.sri_sarah_lestari');
     })->name('pemetaan.sri_sarah_lestari');
+
     Route::get('pemetaan/kompas-ternak', function () {
         return view('admin.kompas_ternak');
     })->name('pemetaan.kompas_ternak');
+
     Route::get('pemetaan/formasi-ternak', function () {
         return view('admin.formasi_ternak');
     })->name('pemetaan.formasi_ternak');
@@ -371,7 +373,6 @@ Route::group(["middleware" => "auth", "prefix" => "admin"], function () {
     Route::post('/upload-sri', [DataTernakController::class, 'upload_sri'])->name('upload.sri');
     Route::post('/upload-formasi-ternak', [DataTernakController::class, 'upload_formasi_ternak'])->name('upload.formasi_ternak');
     Route::post('/upload-simpul-ternak', [DataTernakController::class, 'upload_simpul_ternak'])->name('upload.simpul_ternak');
-
     Route::post('/upload-kompas-ternak', [DataTernakController::class, 'upload_kompas_ternak'])->name('upload.kompas_ternak');
 
     Route::get("pemetaan/data", [SystemController::class, "pemetaan_data"])->name("pemetaan.data");

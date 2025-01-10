@@ -3,7 +3,7 @@
 @section('title', 'Kompas Ternak')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Kompas Ternak</h1>
+<h1 class="m-0 text-dark">Kompas Ternak Provinsi</h1>
 @stop
 
 @section('adminlte_css')
@@ -30,16 +30,16 @@
 
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header">Upload Data Kompas Ternak</div>
+            <div class="card-header">Upload Data Kompas Ternak Provinsi</div>
             <div class="card-body">
                 <form id="upload_form" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="year">Pilih Tahun</label>
-                        <select class="form-control" id="year" name="year" required>
+                        <select class="form-control" id="year" name="tahun" required>
                             @for ($year = 2010; $year <= 2099; $year++)
-                                <option value="{{ $year }}">{{ $year }}</option>
-                                @endfor
+                                <option {{$year == date('Y') ? 'selected' : ''}} value="{{ $year }}">{{ $year }}</option>
+                            @endfor
                         </select>
                     </div>
                     <div class="form-group">
