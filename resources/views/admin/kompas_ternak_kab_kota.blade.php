@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Siap MBG')
+@section('title', 'Kompas Ternak')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Siap MBG</h1>
+<h1 class="m-0 text-dark">Kompas Ternak Kabupaten Kota</h1>
 @stop
 
 @section('adminlte_css')
@@ -30,16 +30,16 @@
 
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header">Upload Data Siap MBG</div>
+            <div class="card-header">Upload Data Kompas Ternak Kabupaten Kota</div>
             <div class="card-body">
-                <form action="{{route('upload.siap_mbg')}}" id="upload_form" method="POST" enctype="multipart/form-data">
+                <form action="{{route('upload_kompas_ternak_kabkota')}}" id="upload_form" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="year">Pilih Tahun</label>
-                        <select class="form-control" id="year" name="year" required>
+                        <select class="form-control" id="year" name="tahun" required>
                             @for ($year = 2010; $year <= 2099; $year++)
-                                <option value="{{ $year }}">{{ $year }}</option>
-                                @endfor
+                                <option {{$year == date('Y') ? 'selected' : ''}} value="{{ $year }}">{{ $year }}</option>
+                            @endfor
                         </select>
                     </div>
                     <div class="form-group">
@@ -51,7 +51,7 @@
                     </div>
                 </form>
                 <div class="form-group d-grid mt-3">
-                    <a href="/template/siap_mbg.csv" class="btn btn-secondary">Unduh Template CSV</a>
+                    <a href="/template/kompas_ternak_kecamatan.csv" class="btn btn-secondary">Unduh Template CSV</a>
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@
             var formData = new FormData(this);
             $.ajax({
                 method: "POST",
-                url: "{{ route('upload.siap_mbg') }}",
+                url: "{{ route('upload_kompas_ternak_kabkota') }}",
                 data: formData,
                 contentType: false,
                 processData: false,

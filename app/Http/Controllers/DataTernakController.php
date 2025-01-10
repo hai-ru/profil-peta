@@ -517,4 +517,95 @@ class DataTernakController extends Controller
 
         return response()->json(['error' => 'File upload failed'], 500);
     }
+
+    public function upload_kompas_ternak_kabkota(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'csv_file' => 'required|file|mimes:csv,txt|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()], 422);
+        }
+
+        // $columns = [
+        //     'id',
+        //     'kabupaten_id',
+        //     'tahun',
+        //     'Provinsi',
+        //     'Kabupaten',
+        //     'Perkiraan Penduduk',
+        //     'Perkiraan Konsumsi Daging Ayam Ras',
+        //     'Target Produksi Daging Ayam Ras',
+        //     'Target Populasi Ayam Ras Pedaging',
+        //     'Target Pemotongan Ayam Ras Pedaging',
+        //     'Perkiraan Konsumsi Telur Ayam Ras',
+        //     'Target Produksi Telur Ayam Ras',
+        //     'Target Populasi Ayam Ras Petelur',
+        //     'Perkiraan Konsumsi Daging Sapi/Kerbau',
+        //     'Target Produksi Daging Sapi/ Kerbau',
+        //     'Target Populasi Sapi/Kerbau',
+        //     'Target Pemotongan Sapi/Kerbau',
+        //     'Perkiraan Konsumsi Daging Kambing/ Domba',
+        //     'Target Produksi Daging Kambing/ Domba',
+        //     'Target Populasi Kambing/ Domba',
+        //     'Target Pemotongan Kambing/ Domba',
+        //     'Perkiraan Konsumsi Daging Babi',
+        //     'Target Produksi Daging Babi',
+        //     'Target Populasi Babi',
+        //     'Target Pemotongan Babi',
+        //     'Perkiraan Konsumsi Daging Ayam Lokal/Buras',
+        //     'Target Produksi Daging Ayam Lokal/Buras',
+        //     'Target Populasi Ayam Lokal/Buras',
+        //     'Target Pemotongan Ayam Lokal/Buras',
+        //     'Perkiraan Konsumsi Daging Bebek/ Itik',
+        //     'Target Produksi Daging Bebek/ Itik',
+        //     'Target Populasi Bebek/ Itik',
+        //     'Target Pemotongan Bebek/ Itik',
+        // ];
+        
+
+        // Process  CSV 
+        if ($request->hasFile('csv_file')) {
+            $file = $request->file('csv_file');
+            $path = $file->getRealPath();
+
+            // read CSV 
+            $file = fopen($path, 'r');
+            $header = fgetcsv($file, 0, ';');
+
+            $tahun = $request->input('tahun');
+
+            DB::beginTransaction();
+            while (($row = fgetcsv($file, 5000, ';')) !== FALSE) {
+                $data = array_combine($header, $row);
+                $kecamatan = $data['kecamatan'] ?? "";
+                $kabupaten = $data['kabupaten'] ?? "";
+
+                $kecamatan_data = \App\Models\Kecamatan::where('nama', 'like', "%$kecamatan%")
+                    ->whereHas('kabupaten', function ($query) use ($kabupaten) {
+                        $query->where('nama', 'like', "%$kabupaten%");
+                    })->first();
+
+                $data['kecamatan_id'] = $kecamatan_data->id ?? null;
+
+                // insert to table
+                DB::table('kompas_ternak_kecamatan')->updateOrInsert(
+                [
+                    'tahun' => $tahun,
+                    'kecamatan' => $kecamatan,
+                    'kabupaten' => $kabupaten
+                ],
+                $data
+                );
+            }
+
+            fclose($file);
+            DB::commit();
+            return response()->json(['success' => 'Data imported successfully']);
+        }
+
+        return response()->json(['error' => 'File upload failed'], 500);
+    }
+
 }
