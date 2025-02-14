@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SystemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-// use DB;
 use Illuminate\Support\Facades\DB;
 
 /*
@@ -19,10 +18,24 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-Route::get('/', function () {
-    // return redirect()->route('web-gis');
-    return redirect()->to('kompas-ternak/kabupaten');
-})->name("/");
+// $database_domain = ['beautyproclinic.com','koneksiedu.com','si-muda.com'];
+
+// $domain = 'ternakkalbar.com';
+Route::group(['domain' => '{domain}.{tld}'], function(){
+    $host = request()->getHost();
+
+    Route::get('/', function($domain, $tld, Request $request)
+    {
+        if(str_contains($domain, 'potret')){
+            return redirect()->to('/potret-ternak');
+        }
+        return redirect()->to('kompas-ternak/kabupaten');
+    });
+});
+
+// Route::get('/', function () {
+//     return redirect()->to('kompas-ternak/kabupaten');
+// })->name("/");
 
 Route::get('/rekapitulasi', function () {
     $data["kabupaten"] = \App\Models\Kabupaten::all();
