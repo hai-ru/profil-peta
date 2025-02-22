@@ -201,7 +201,8 @@ Route::get('/kompas-ternak/kabupaten', function () {
 
     $data['list_kota'] = DB::table('kabupaten_kotas')->get();
 
-    return view('kompas_ternak_kab', $data);
+    return view('peternakan_template.kompas_ternak_kab', $data);
+    // return view('kompas_ternak_kab', $data);
 })->name("kompas_ternak_kab");
 
 Route::get('/kompas-ternak/kabupaten/service', function (Request $request) {
