@@ -152,6 +152,20 @@
         img.logo_disbun{
             display: none;
         }
+        .rounded-container {
+            background-color: #2d3e2f;
+            padding: 20px;
+            border-radius: 20px;
+        }
+        .image-container img {
+            border-radius: 15px;
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        div.featured_image{
+            margin: 10px;
+        }
         /* Untuk layar mobile */
         @media (max-width: 767px) { 
             .hidden-mobile {
@@ -311,8 +325,30 @@
                 </div>
                 
             </div>
+
+            <div class="col-md-3 hidden-mobile">
+                <div class="container rounded-container featured_image">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="image-container">
+                                <img src="/img/feature1.png" alt="Peternakan Sapi">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="image-container">
+                                <img src="/img/feature2.png" alt="Peternakan Ayam">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="image-container">
+                                <img src="/img/feature3.png" alt="Peternakan Kambing">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
     
-            <div class="col-md-12" >
+            <div class="col-md-9" >
                 <div id="map"></div>
             </div>
     
