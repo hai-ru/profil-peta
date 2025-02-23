@@ -314,7 +314,7 @@
     })
 
     const UnloadMap = () => {
-        map.data.forEach(function(feature) {
+        map?.data?.forEach(function(feature) {
             map.data.remove(feature);
         });
     }
@@ -512,6 +512,7 @@
             const f = event.feature;
             let contentString = "";
             f.forEachProperty((item,key) => {
+                if(!item) return;
                 if(key == "style") return;
                 if(item.tipe == "marker") return;
                 let content = item;

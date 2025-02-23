@@ -61,7 +61,8 @@ Route::get('/simpul-ternak', function () {
         ->get()
         ->pluck('komoditi');
 
-    return view('simpul_ternak_kab', $data);
+    return view('peternakan_template.simpul_ternak', $data);
+    // return view('simpul_ternak_kab', $data);
 })->name("simpul_ternak_kab");
 
 Route::get('/simpul-ternak/service', function (Request $request) {
