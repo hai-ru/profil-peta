@@ -230,7 +230,8 @@ Route::get('/formasi-ternak', function () {
 
     $data['list_kota'] = DB::table('kabupaten_kotas')->get();
 
-    return view('formasi_ternak', $data);
+    // return view('formasi_ternak', $data);
+    return view('peternakan_template.formasi_ternak', $data);
 })->name("formasi_ternak");
 
 Route::get('/formasi-ternak/service', function (Request $request) {
