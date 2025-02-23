@@ -50,6 +50,44 @@ Route::get('/esri', function () {
     return view('esri');
 })->name("esri");
 
+Route::get('/pakiss', function () {
+    $data['list_skor'] = [
+        [
+            'val'=>0,
+            'nama'=>"Sangat Sesuai",
+            'warna'=>"#17ad00",
+        ],
+        [
+            'val'=>1,
+            'nama'=>"Sangat Tidak Sesuai",
+            'warna'=>"#fc0303",
+        ],
+        [
+            'val'=>2,
+            'nama'=>"Sedang",
+            'warna'=>"#ad8500",
+        ],
+        [
+            'val'=>3,
+            'nama'=>"Sesuai",
+            'warna'=>"#618f31",
+        ],
+        [
+            'val'=>4,
+            'nama'=>"Tidak Sesuai",
+            'warna'=>"#8f3131",
+        ],
+        [
+            'val'=>5,
+            'nama'=>"Cukup Sesuai",
+            'warna'=>"#ad8500",
+        ],
+    ];
+    // return view('sipakis_test',$data);
+    return view('peternakan_template.pakiss',$data);
+})->name("pakiss");
+
+
 Route::get('/simpul-ternak', function () {
 
     $data['tahun'] = DB::table('simpul_ternak_kabupaten')
