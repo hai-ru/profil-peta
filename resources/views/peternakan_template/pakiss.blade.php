@@ -336,6 +336,7 @@
     <script src="/loading/jquery-easy-loading/dist/jquery.loading.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
     <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+    <script src="https://unpkg.com/shpjs@latest/dist/shp.js"></script>
     <script type="text/javascript">
         $.ajaxSetup({
             headers: {
