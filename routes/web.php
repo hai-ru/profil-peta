@@ -106,7 +106,8 @@ Route::get('/siap-mbg', function () {
         ],
     ];
 
-    return view('siap_mbg', $data);
+    // return view('siap_mbg', $data);
+    return view('peternakan_template.siap_mbg', $data);
 })->name("siap_mbg");
 
 Route::get('/siap-mbg/service', function (Request $request) {
