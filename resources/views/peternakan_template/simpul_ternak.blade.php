@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>SIMPUL TERNAK PROVINSI KALIMANTAN BARAT</title>
-    <meta name="description" content="Aplikasi Sri Sarah Lestari membantu analisis kelayakan investasi sapi potong dan sapi perah dengan perhitungan ROI, BEP, dan NPV. Dapatkan simulasi keuangan, manajemen risiko, serta laporan komprehensif untuk keputusan investasi yang lebih cerdas.">
+    <meta name="description" content="SIMPUL TERNAK adalah aplikasi supply-demand daging sapi, ayam, kambing, dan babi di Provinsi Kalimantan Barat, Indonesia. Dapatkan data real-time ketersediaan, permintaan, serta distribusi daging untuk mendukung efisiensi pasar peternakan.">
     <link rel="shortcut icon" href="/img/favicon/simpulternak-favicon.ico" type="image/x-icon">
     <link rel="icon" href="/img/favicon/simpulternak-favicon.ico" type="image/x-icon">
 
