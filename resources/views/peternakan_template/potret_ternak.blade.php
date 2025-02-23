@@ -8,8 +8,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>POTRET TERNAK PROVINSI KALIMANTAN BARAT</title>
     <meta name="description" content="SIAP MBG adalah aplikasi untuk mengelola data atribut daging, susu, dan telur. Pantau kualitas, asal, dan distribusi produk peternakan dengan sistem terstruktur untuk memastikan keamanan dan transparansi rantai pasok.">
-    <link rel="shortcut icon" href="/img/favicon/potretternak-favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/img/favicon/potretternak-favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/img/favicon/potretternak-favicon.png" type="image/x-icon">
+    <link rel="icon" href="/img/favicon/potretternak-favicon.png" type="image/x-icon">
 
      <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -202,7 +202,7 @@
                     
             
                     <!-- Logo Kanan -->
-                    <div class="d-flex hidden-mobile">
+                    <div class="d-flex">
                         <div class="text_container">
                             <span class="fw-bold fs-5">POTENSI PAKAN & PRODUK SAMPING</span>
                             <br />
