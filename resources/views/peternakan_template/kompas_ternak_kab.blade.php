@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>KOMPAS TERNAK PROVINSI KALIMANTAN BARAT</title>
+    <meta name="description" content="Aplikasi Kompas Ternak membantu perencanaan roadmap sarana dan prasarana peternakan. Optimalkan manajemen infrastruktur, alokasi sumber daya, dan pengambilan keputusan dengan data terstruktur untuk peternakan yang lebih efisien dan berkelanjutan.">
+    <link rel="shortcut icon" href="/img/favicon/kompasternak-favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon/kompasternak-favicon.ico" type="image/x-icon">
 
      <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
