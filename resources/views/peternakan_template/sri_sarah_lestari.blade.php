@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>KOMPAS TERNAK PROVINSI KALIMANTAN BARAT</title>
+    <title>SRI SARAH LESTARI PROVINSI KALIMANTAN BARAT</title>
 
      <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,10 +14,11 @@
     <link href="/loading/jquery-easy-loading/dist/jquery.loading.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: "Montserrat", sans-serif;
+            font-family: "DM Sans", serif;
+            font-optical-sizing: auto;
         }
         .nav-pills .nav-link{border-radius: 0px;}
         .nav-fill{background: black;}
@@ -36,7 +37,7 @@
         .logo_timpa{
             float: left;
             z-index: 99;
-            position: absolute;
+            /* position: absolute; */
             left: 11px;
             top: 9px;
         }
@@ -49,7 +50,7 @@
 
         #control-map{
             display: none; 
-            position: absolute; 
+            /* position: absolute;  */
             margin-top: 0.5%;
             z-index: 2; 
             background: white; 
@@ -59,7 +60,7 @@
 
         #show-control {
             display: block; 
-            position: absolute; 
+            /* position: absolute;  */
             margin-top: 0.5%;
             margin-left: 84%;
             z-index: 1; 
@@ -88,7 +89,7 @@
 
         #log-control{
             display: block; 
-            position: absolute; 
+            /* position: absolute;  */
             left: 50px;
             top: 90vh;
             z-index: 1; 
@@ -99,7 +100,7 @@
             left: 155px;
             top: 85vh;
             display: block; 
-            position: absolute; 
+            /* position: absolute;  */
             z-index: 1; 
             background: white; 
             padding: 10px; 
@@ -128,9 +129,20 @@
         #close-control {
             display: block; /* Tampilkan secara default */
         }
+        .accordion-button:not(.collapsed) {
+            color: #ffffff;
+            background-color: #3c0f09;
+            box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .125);
+        }
+        .accordion-button:not(.collapsed)::after {
+            background-image: none;
+        }
 
         @media (min-width: 768px) { /* Untuk layar lebih besar (tablet & desktop) */
             #close-control {
+                display: none;
+            }
+            #show-control{
                 display: none;
             }
         }
@@ -138,9 +150,27 @@
             #show-control {
                 margin-left: 5%; /* Geser ke kiri */
                 margin-top: 15%;
+                position: absolute;
+                border-radius: 5px;
+                background:#ffffffb3;
             }
             #map-container{
                 padding: 0px;
+            }
+            .hidden-mobile {
+                display: none;
+            }
+            .show-mobile {
+                display: block;
+            }
+            img.logo_apps{
+                width: 200px;
+            }
+            div.mobile_control{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
             }
         }
     </style>
@@ -149,22 +179,25 @@
 <body>
 
     <div class="container-content">
+
+        <div id="show-control">
+            <div class="mobile_control">
+                <img src="/img/sri_sarah_lestari_logo.png" class="logo_apps" alt="sri sarah lestari">
+                <button id="btn-control" class="btn btn-secondary btn-xl"><i class="fa fa-list-alt"></i> Menu</button>
+            </div>
+        </div>
     
         <div class="row">
 
-            <div id="map-container" class="col-md-12">
-
-                <div id="show-control">
-                    <button id="btn-control" class="btn btn-primary btn-xl"><i class="fa fa-cog"></i> Pengaturan</button>
-                </div>
-
+            <div id="show_sidebar" class="col-md-3 hidden-mobile">
+    
                 <div id="control-map">
                     <button id="close-control" class="btn btn-danger"> <i class="fa fa-close"></i> </button>
                     <div style="text-align: center;">
-                        <img src="/img/kompas_ternak_logo.png" class="logo_apps" alt="kompas_ternak_logo">
+                        <img src="/img/sri_sarah_lestari_logo.png" class="logo_apps" alt="sri sarah lestari">
                     </div>
                     <div class="accordion" id="accordion">
-
+    
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0">
@@ -173,35 +206,49 @@
                             </h2>
                             <div id="collapse0" class="accordion-collapse collapse show">
                                 <div class="accordion-body">
+    
                                     <div class="form-group">
-                                        <label>Tahun</label>
-                                        <select id="tahun" class="form-control">
-                                            @foreach ($tahun as $item)
+                                        <label>Kabupaten</label>
+                                        <select id="kabupaten" class="form-control">
+                                            @foreach ($kabupaten as $item)
                                             <option value="{{ $item }}">
                                                 {{ $item }}
                                             </option>
                                             @endforeach
                                         </select>
                                     </div>
+    
+                                    <div class="form-group">
+                                        <label>Jenis Investasi</label>
+                                        <select id="jenis" class="form-control">
+                                            <option value="sapi perah/100">Sapi Perah (100 ekor)</option>
+                                            <option value="sapi perah/1000">Sapi Perah (1000 ekor)</option>
+                                            <option value="sapi potong/100">Sapi Potong (100 ekor)</option>
+                                            <option value="sapi potong/1000">Sapi Potong (1000 ekor)</option>
+                                        </select>
+                                    </div>
+                                    
                                     <div class="layer_data">
-                                        @foreach ($list_kota as $item)
+    
+                                        @foreach ($list_skor as $item)
                                             <div class="form-check" style="margin-left: 5px;">
                                                 <div style='
                                                 height: 10px;
                                                 width: 21px;
-                                                border: 1px solid {{$item->warna}};
-                                                background: {{$item->warna}};
+                                                border: 1px solid {{$item['warna']}};
+                                                background: {{$item['warna']}};
                                                 display: inline-block;'></div>
-                                                <label for="layer_{{$item->id}}" class="form-check-label">
-                                                    {{$item->nama}}
+                                                <label for="layer_{{$item['val']}}" class="form-check-label">
+                                                    {{$item['nama']}}
                                                 </label>
                                             </div> 
                                         @endforeach
+     
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+    
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
@@ -210,18 +257,18 @@
                             </h2>
                             <div id="collapse2" class="accordion-collapse collapse">
                             <div class="accordion-body">
-
+    
                                 <div class="d-grid">
                                     <button class="btn btn-danger" onclick="ResetMarker();">Bersihkan Marker Pada Peta</button>
                                 </div>
-
+    
                                 <hr>
-
+    
                                 <div class="form-group">
                                     <label>Pencarian Lokasi</label>
                                     <input class="form-control" type="text" name="search" id="cari-lokasi" placeholder="Cari Lokasi Disini..">
                                 </div>
-
+    
                                 <hr>
                                 <p style="font-weight: bold;font-size: 14px;"><u>PENCARIAN DENGAN KOORDINAT</u></p>
                                 <form onsubmit="return Koordinat();">
@@ -241,7 +288,7 @@
                             </div>
                             </div>
                         </div>
-
+    
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
@@ -262,16 +309,16 @@
                             </div>
                             </div>
                         </div>
-
+    
                     </div>
                 </div>
                 
             </div>
-
-            <div id="map-container" class="col-md-12" >
+    
+            <div class="col-md-9" >
                 <div id="map"></div>
             </div>
-
+    
         </div>
 
     </div>
@@ -305,18 +352,18 @@
         var zooms = 8;
         var markerpoktan = [];
         let parserGeoxml;
-
+    
         $("#btn-log").click(function(){
             $("#log_layer").modal("show");
         });
-
+    
         let start_render, startTimer;
         $("#stop_btn").click(function(){
             if(startTimer !== undefined){
                 clearInterval(startTimer);
             }
         });
-
+    
         $(".cekbox").click(function(e){
             const parent = $("#collapse0")
             let ids = []
@@ -324,43 +371,52 @@
                 ids.push($(this).val());
             });
             loadData(ids)
-        
+           
         })
-
+    
         const UnloadMap = () => {
             map.data.forEach(function(feature) {
                 map.data.remove(feature);
             });
         }
-
-        $("#tahun").change(function(){
-            const tahun = $(this).val();
-            loadData(tahun);
+    
+        $("#jenis").change(function(){
+            loadData();
         });
-
-        const loadData = (year) => {
+        $("#kabupaten").change(function(){
+            loadData();
+        });
+    
+        let listData = {
+            "satu":0,
+            "dua":0,
+            "tiga":0,
+        }
+    
+        const loadData = () => {
             UnloadMap();
+            const kabupaten = $("#kabupaten").val();
+            const jenis = $("#jenis").val();
+            const link = `/sri-sarah-lestari/service?&kabupaten=${kabupaten}&jenis=${jenis}`;
             $.ajax({
-                url:`/kompas-ternak/kabupaten/service?tahun=${year}`,
+                url:link,
                 type:"GET",
                 success:function(response){
-
                     
                     if(!response.status) 
                     return alert(response.message);
-
+    
                     response.data.forEach( (elm,index) => {
-                        const nama = elm['COL 3'];
+                        const nama = elm[''];
                         let geojson = null;
                         try {
                             geojson = JSON.parse(elm.geojson);
                             let properties = elm;
                             delete properties.geojson;
-                            delete properties.center;
+                            delete properties.kabupaten_kotas_id;
                             delete properties.id;
-                            delete properties.kabupaten_id;
+                            delete properties.kecamatan_id;
                             geojson.properties = properties;
-                            // console.log("geojson",geojson);
                         } catch (error) {
                             geojson = null
                         }
@@ -371,9 +427,17 @@
                             )
                         }
                     })
-
+    
                     map.data.setStyle(function(feature){
-                        const warna = feature.getProperty("warna") || {};
+                        let skoring = feature.getProperty("tingkat_kesesuaian_lahan") || "";
+                        let warna = "#000";
+                        switch (skoring) {
+                            @foreach($list_skor as $value)
+                                case "{{$value['nama']}}":
+                                    warna = "{{ $value['warna'] }}"
+                                    break;
+                            @endforeach
+                        }
                         return {
                             strokeColor: warna,
                             strokeOpacity: 1.0,
@@ -385,28 +449,28 @@
                 }
             })
         }
-
+    
         function ResetMarker() {
             // Clear out the old markers.
-            markers.forEach(function(marker) {
+              markers.forEach(function(marker) {
                 marker.setMap(null);
-            });
-            markers = [];
-            return false;
+              });
+              markers = [];
+              return false;
         }
-
+    
         function popitup(url,windowName) {
-        newwindow=window.open(url,windowName,'height=500,width=800');
-        if (window.focus) {newwindow.focus()}
-        return false;
+           newwindow=window.open(url,windowName,'height=500,width=800');
+           if (window.focus) {newwindow.focus()}
+           return false;
         }
-
+    
         function initMap() {
             infowindow = new google.maps.InfoWindow();
             map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat: -0.10814501846297607, lng: 109.3182775878906},
                 zoom: zooms,
-                mapTypeId: google.maps.MapTypeId.HYBRID,
+                mapTypeId: 'hybrid',
                 mapTypeControl: true,
                 mapTypeControlOptions: {
                     style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
@@ -423,7 +487,7 @@
                 },
                 fullscreenControl: true
             });
-
+    
             ib = new InfoBubble({
                 animation:true,
                 shadowStyle: 0,
@@ -433,11 +497,11 @@
                 arrowPosition: 50,
                 arrowStyle: 0
             });
-
+    
             measureTool = new MeasureTool(map, {
-            showSegmentLength: true,
-            tooltip: true,
-            unit: MeasureTool.UnitTypeId.METRIC // metric or imperial
+              showSegmentLength: true,
+              tooltip: true,
+              unit: MeasureTool.UnitTypeId.METRIC // metric or imperial
             });
             
             measureTool.addListener('measure_start', () => {
@@ -452,55 +516,53 @@
                 console.log('changed', e.result);
                 //      measureTool.removeListener('measure_change');
             });
-
+    
             var input = document.getElementById('cari-lokasi');
             var searchBox = new google.maps.places.SearchBox(input);
-
+    
             map.addListener('bounds_changed', function() {
-            searchBox.setBounds(map.getBounds());
+              searchBox.setBounds(map.getBounds());
             });
-
+    
             searchBox.addListener('places_changed', function() {
-
+    
                 var places = searchBox.getPlaces();
-
+    
                 if (places.length == 0) {
                     return;
                 }
-
+    
                 ResetMarker();
-
+    
                 places.forEach(function(place) {
-
+    
                     let long = place.geometry.location.lng().toFixed(8);
                     let lat = place.geometry.location.lat().toFixed(8);
-
+    
                     console.log("LAT : ",lat);
                     console.log("LONG : ",long);
-
+    
                     $("#long").val(long);
                     $("#lat").val(lat);
-
+    
                     Koordinat();
-
+    
                 });
-
+    
             });
             
             google.maps.event.addListener(map, "click", function(event) {
                 if(ib !== undefined && ib !== null ) ib.close();
             });
-
+    
             map.data.addListener('click', function(event) {
                 const f = event.feature;
                 let contentString = "";
                 f.forEachProperty((item,key) => {
-                    if(!item) return;
-                    if(item == null) return;
                     if(key == "style") return;
-                    if(item.tipe == "marker") return;
+                    if(item?.tipe == "marker") return;
                     let content = item;
-                    if(item.tipe == "image"){
+                    if(item?.tipe == "image"){
                         content = `<a target="_blank" href="${item.data}"><img src="${item.data}" height="100" /></a>`
                     }
                     contentString += `<tr>
@@ -516,30 +578,30 @@
                 infowindow.open(map)
             })
         }
-
+    
         function Koordinat() {
-
+    
             var long = parseFloat($('#long').val());
             var lat = parseFloat($('#lat').val());
             MyCoor = {lat: lat, lng: long};
-
+    
             ResetMarker();
-
+    
             var contentString = '<div id="content">Silahkan Klik Pada Peta untuk memindahkan marker'+'</div>';
             var infowindow = new google.maps.InfoWindow({
                 content: contentString
             });
-
+    
             // Create a marker for each place.
             markers.push(new google.maps.Marker({
                 map: map,
                 position: MyCoor
             }));
-
+    
             infowindow.open(map, markers[0]);
-
+    
             google.maps.event.addListener(map, 'click', function(event) {
-
+    
                 markers.map((item,index)=>{
                     item.setPosition(event.latLng);
                 });
@@ -547,64 +609,75 @@
                 $("#lat").val( event.latLng.lat().toFixed(8) );
                 $("#long").val( event.latLng.lng().toFixed(8) );
             });
-
+    
             map.setCenter(MyCoor);
             map.setZoom(15);
-
+    
             return false;
-
+    
         }
-
+    
         function polygonMouseOver(poly, text) {
-
-            google.maps.event.addListener(poly,'mouseover', function(evt) {
+    
+              google.maps.event.addListener(poly,'mouseover', function(evt) {
                 ib.setContent(text);
                 ib.setPosition(evt.latLng);
                 ib.setMap(map);
                 ib.open();
-            });
-            google.maps.event.addListener(poly,'mouseout', function(evt) {
+              });
+              google.maps.event.addListener(poly,'mouseout', function(evt) {
                 ib.close();
-            });
-
+              });
+    
         }
-
-
+    
+    
         $('#btn-control').click(function(){
             if ($(window).width() >= 768) {
 
             } else {
                 $('#close-control').show("slow");
+                $("#show_sidebar").show("slow");
+                $("#show-control").hide("slow");
             }
             $('#control-map').show("slow");
             $(this).hide("slow");
         });
-
+    
         $('#close-control').click(function(){
             $('#control-map').hide("slow");
             $(this).hide("slow");
+            $("#show-control").show("slow");
             $('#btn-control').show("slow");
         });
-
+    
         $( document ).ajaxStart(function() {
-
-            $('body').loading({
-                stoppable: true
+    
+              $('body').loading({
+                  stoppable: true
                 });
-
+    
         });
-
+    
         $( document ).ajaxStop(function() {
-
-            $('body').loading('stop');
-
+    
+              $('body').loading('stop');
+    
         });
-
+    
         $(document).ready(function(){
-            $('#btn-control').click();
-            $("#tahun").trigger('change');
+            if ($(window).width() >= 768) {
+                $('#btn-control').click();
+            }
+            loadData();
         });
-
+    
+        let status = 'status_kecukupan_mbg_daging_sapi';
+        $("#mbg").change(function(){
+            status = $(this).val()
+            loadData();
+        })
+    
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZzzDr8qs1sU2cxVAk-ewxecN9dBpqirc&callback=initMap&libraries=geometry,places" async defer></script>
 </body>

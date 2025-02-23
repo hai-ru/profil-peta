@@ -159,7 +159,8 @@ Route::get('/sri-sarah-lestari', function () {
         ],
     ];
 
-    return view('sri_sarah_lestari', $data);
+    // return view('sri_sarah_lestari', $data);
+    return view('peternakan_template.sri_sarah_lestari', $data);
 })->name("sri-sarah-lestari");
 
 Route::get('/sri-sarah-lestari/service', function (Request $request) {
