@@ -253,7 +253,8 @@ Route::get('/potret-ternak', function (Request $request) {
         ->get()
         ->pluck('Kabupaten/Kota');
 
-    return view('potret_ternak', $data);
+    // return view('potret_ternak', $data);
+    return view('peternakan_template.potret_ternak', $data);
 })->name("potret_ternak");
 
 Route::get('/potret-ternak/service', function (Request $request) {

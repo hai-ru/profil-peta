@@ -148,26 +148,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-{{--                                 
-                                <div class="layer_data">
-
-                                    @foreach ($list_skor as $item)
-                                        <div class="form-check" style="margin-left: 5px;">
-                                            <div style='
-                                            height: 10px;
-                                            width: 21px;
-                                            border: 1px solid {{$item['warna']}};
-                                            background: {{$item['warna']}};
-                                            display: inline-block;'></div>
-                                            <label for="layer_{{$item['val']}}" class="form-check-label">
-                                                {{$item['nama']}}
-                                                (<span id="skoring_{{$item['val']}}">0</span>)
-                                            </label>
-                                        </div> 
-                                    @endforeach
- 
-                                </div>
-  --}}
                             </div>
                         </div>
                     </div>
