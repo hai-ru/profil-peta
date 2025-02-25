@@ -392,7 +392,7 @@
         })
     
         const UnloadMap = () => {
-            map.data.forEach(function(feature) {
+            map?.data?.forEach(function(feature) {
                 map.data.remove(feature);
             });
         }
