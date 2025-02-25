@@ -231,6 +231,18 @@
                             </h2>
                             <div id="collapse0" class="accordion-collapse collapse show">
                                 <div class="accordion-body">
+
+                                    <div class="form-group mb-2">
+                                        <label>Kabupaten</label>
+                                        <select id="kabupaten" class="form-control">
+                                            @foreach ($kabupaten as $item)
+                                            <option value="{{ $item['value'] }}">
+                                                {{ $item['label'] }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <div class="layer_data">
     
                                         @foreach ($list_skor as $item)
@@ -385,9 +397,9 @@
             });
         }
     
-        const loadData = () => {
+        const loadData = (url) => {
             UnloadMap();
-            shp("/shp/BENGKAYANG.zip")
+            shp(url)
             .then(function(geojson){
                 console.log("start",geojson)
                 LoadMap(geojson)
@@ -728,7 +740,7 @@
     
         $(document).ready(function(){
             $('#btn-control').click();
-            loadData();
+            loadData($('#kabupaten').val());
         });
     
     </script>

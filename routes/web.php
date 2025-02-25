@@ -51,6 +51,7 @@ Route::get('/esri', function () {
 })->name("esri");
 
 Route::get('/pakiss', function () {
+
     $data['list_skor'] = [
         [
             'val'=>0,
@@ -83,7 +84,66 @@ Route::get('/pakiss', function () {
             'warna'=>"#ad8500",
         ],
     ];
-    // return view('sipakis_test',$data);
+
+    $data['kabupaten'] = [
+        [
+            'label'=>'Kabupaten Bengkayang',
+            'value'=>"/shp/BENGKAYANG.zip"
+        ],
+        [
+            'label'=>'Kabupaten Kapuas Hulu',
+            'value'=>"/shp/KAPUAS_HULU.zip"
+        ],
+        [
+            'label'=>'Kabupaten Kayong Utara',
+            'value'=>"/shp/KAYONG UTARA.zip"
+        ],
+        [
+            'label'=>'Kabupaten Ketapang',
+            'value'=>"/shp/KETAPANG.zip"
+        ],
+        [
+            'label'=>'Kabupaten Kubu Raya',
+            'value'=>"/shp/KUBURAYA.zip"
+        ],
+        [
+            'label'=>'Kabupaten Landak',
+            'value'=>"/shp/LANDAK.zip"
+        ],
+        [
+            'label'=>'Kabupaten Melawi',
+            'value'=>"/shp/MELAWI.zip"
+        ],
+        [
+            'label'=>'Kabupaten Mempawah',
+            'value'=>"/shp/MEMPAWAH.zip"
+        ],
+        [
+            'label'=>'Kabupaten Sambas',
+            'value'=>"/shp/SAMBAS.zip"
+        ],
+        [
+            'label'=>'Kabupaten Sanggau',
+            'value'=>"/shp/SANGGAU.zip"
+        ],
+        [
+            'label'=>'Kabupaten Sekadau',
+            'value'=>"/shp/SEKADAU.zip"
+        ],
+        [
+            'label'=>'Kabupaten Sintang',
+            'value'=>"/shp/SINTANG.zip"
+        ],
+        [
+            'label'=>'Kota Pontianak',
+            'value'=>"/shp/PONTIANAK.zip"
+        ],
+        [
+            'label'=>'Kota Singkawang',
+            'value'=>"/shp/SINGKAWANG.zip"
+        ],
+    ];
+    
     return view('peternakan_template.pakiss',$data);
 })->name("pakiss");
 
