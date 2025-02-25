@@ -404,31 +404,6 @@
                 console.log("start",geojson)
                 LoadMap(geojson)
             })
-            // shp("/shp/PONTIANAK.zip")
-            // .then(function(geojson){
-            //     console.log("start",geojson)
-            //     LoadMap(geojson)
-            // })
-            // shp("/shp/SINGKAWANG.zip")
-            // .then(function(geojson){
-            //     console.log("start",geojson)
-            //     LoadMap(geojson)
-            // })
-            // shp("/shp/SAMBAS.zip")
-            // .then(function(geojson){
-            //     console.log("start",geojson)
-            //     LoadMap(geojson)
-            // })
-            // shp("/shp/MEMPAWAH.zip")
-            // .then(function(geojson){
-            //     console.log("start",geojson)
-            //     LoadMap(geojson)
-            // })
-            // shp("/shp/KUBURAYA.zip")
-            // .then(function(geojson){
-            //     console.log("start",geojson)
-            //     LoadMap(geojson)
-            // })
         }
     
         let columns = [];
@@ -736,6 +711,10 @@
     
               $('body').loading('stop');
     
+        });
+
+        $('#kabupaten').change(function(){
+            loadData($(this).val());
         });
     
         $(document).ready(function(){
