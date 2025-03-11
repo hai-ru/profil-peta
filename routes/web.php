@@ -338,7 +338,7 @@ Route::get('/formasi-ternak', function () {
 
 Route::get('/formasi-ternak/service', function (Request $request) {
     $tahun = $request->tahun ?? "";
-    $jenis = $request->jenis ?? "";
+    $jenis = $request->jenis_ternak ?? "";
     $data = DB::table('formasi_ternak')
         ->select('*', 'kabupaten_kotas.geojson')
         ->where('tahun', $tahun)
