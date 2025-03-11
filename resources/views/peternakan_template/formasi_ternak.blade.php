@@ -273,6 +273,16 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        <div class="form-group">
+                                            <label>Jenis Ternak</label>
+                                            <select id="jenis" class="form-control">
+                                                @foreach ($jenis_ternak as $item)
+                                                <option value="{{ $item }}">
+                                                    {{ $item }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                         <div class="layer_data">
                                             @foreach ($list_kota as $item)
                                                 <div class="form-check" style="margin-left: 5px;">
@@ -420,14 +430,20 @@
         }
     
         $("#tahun").change(function(){
-            const tahun = $(this).val();
+            const tahun = $('#tahun').val();
+            const jenis = $('#jenis').val();
+            loadData(tahun);
+        });
+        $("#jenis").change(function(){
+            const tahun = $('#tahun').val();
+            const jenis = $('#jenis').val();
             loadData(tahun);
         });
     
-        const loadData = (year) => {
+        const loadData = (year,jenis) => {
             UnloadMap();
             $.ajax({
-                url:`/formasi-ternak/service?tahun=${year}`,
+                url:`/formasi-ternak/service?tahun=${year}&jenis_ternak=${jenis}`,
                 type:"GET",
                 success:function(response){
     
@@ -437,6 +453,7 @@
     
                     response.data.forEach( (elm,index) => {
                         const nama = elm['COL 3'];
+                        console.log("nama",nama,elm);
                         let geojson = null;
                         try {
                             geojson = JSON.parse(elm.geojson);

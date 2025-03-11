@@ -325,6 +325,10 @@ Route::get('/formasi-ternak', function () {
         ->groupBy('tahun')
         ->get()
         ->pluck('tahun');
+    $data['jenis_ternak'] = DB::table('formasi_ternak')
+        ->groupBy('jenis_ternak')
+        ->get()
+        ->pluck('jenis_ternak');
 
     $data['list_kota'] = DB::table('kabupaten_kotas')->get();
 
@@ -334,9 +338,11 @@ Route::get('/formasi-ternak', function () {
 
 Route::get('/formasi-ternak/service', function (Request $request) {
     $tahun = $request->tahun ?? "";
+    $jenis = $request->jenis ?? "";
     $data = DB::table('formasi_ternak')
         ->select('*', 'kabupaten_kotas.geojson')
         ->where('tahun', $tahun)
+        ->where('jenis_ternak', $jenis)
         ->join('kabupaten_kotas', 'kabupaten_kotas.id', '=', 'formasi_ternak.kabupaten_id')
         ->get();
     return [
