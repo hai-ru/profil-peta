@@ -432,12 +432,12 @@
         $("#tahun").change(function(){
             const tahun = $('#tahun').val();
             const jenis = $('#jenis').val();
-            loadData(tahun);
+            loadData(tahun,jenis);
         });
         $("#jenis").change(function(){
             const tahun = $('#tahun').val();
             const jenis = $('#jenis').val();
-            loadData(tahun);
+            loadData(tahun,jenis);
         });
     
         const loadData = (year,jenis) => {
