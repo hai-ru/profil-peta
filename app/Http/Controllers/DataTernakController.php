@@ -146,12 +146,13 @@ class DataTernakController extends Controller
                     "%$kabupaten%"
                 )->first();
                 
-                DB::table('formasi_ternak')->updateOrInsert(
-                    [
-                        'tahun' => $tahun,
-                        'provinsi' => $data['provinsi'] ?? "Kalimantan Barat",
-                        'kabupaten' => $kabupaten
-                    ],
+                // DB::table('formasi_ternak')->updateOrInsert(
+                //     [
+                //         'tahun' => $tahun,
+                //         'provinsi' => $data['provinsi'] ?? "Kalimantan Barat",
+                //         'kabupaten' => $kabupaten
+                //     ],
+                DB::table('formasi_ternak')->insert(
                     [
                         'provinsi' => $data['provinsi'] ?? "Kalimantan Barat",
                         'kabupaten' => $kabupaten,
