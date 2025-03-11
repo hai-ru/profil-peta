@@ -145,15 +145,17 @@ class DataTernakController extends Controller
                     'like',
                     "%$kabupaten%"
                 )->first();
+                
                 DB::table('formasi_ternak')->updateOrInsert(
                     [
                         'tahun' => $tahun,
-                        'provinsi' => $data['provinsi'] ?? "",
+                        'provinsi' => $data['provinsi'] ?? "Kalimantan Barat",
                         'kabupaten' => $kabupaten
                     ],
                     [
-                        'provinsi' => $data['provinsi'] ?? "",
+                        'provinsi' => $data['provinsi'] ?? "Kalimantan Barat",
                         'kabupaten' => $kabupaten,
+                        'kabupaten_id' => $kabupaten_data->id ?? null,
                         'bobot_hidup_siap_potong' => $data['bobot_hidup_siap_potong'],
                         'berat_karkas' => $data['berat_karkas'],
                         'berat_daging_murni' => $data['berat_daging_murni'],
@@ -181,7 +183,6 @@ class DataTernakController extends Controller
                         'jumlah_pemberian_suplemen_vitamin_obat' => $data['jumlah_pemberian_suplemen_vitamin_obat'],
                         'jenis_ternak' => $data['jenis_ternak'],
                         'tahun' => $tahun,
-                        'kabupaten_id' => $kabupaten_data ?? null
                     ]
                 );
             }
